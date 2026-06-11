@@ -27,7 +27,9 @@ title: C++ DSA Concepts Guide
 
 ---
 
-## Arrays & Hashing
+<a id="arrays--hasing"></a>
+
+## Arrays ## Arrays & Hashing Hashing
 
 ### 1. Hash Sets
 
@@ -300,7 +302,9 @@ for (int x : nums)
 
 ---
 
-## Two Pointers & Sliding Window
+<a id="two-pointers"></a>
+
+## Two Pointers ## Two Pointers & Sliding Window Sliding Window
 
 ### 21. Two Pointers Technique
 
@@ -399,7 +403,9 @@ for (int hi = 0; hi < (int)s.size(); hi++) {
 
 ---
 
-## Stack & Queue
+<a id="stack"></a>
+
+## Stack ## Stack & Queue Queue
 
 ### 27. Stack Data Structure
 
@@ -446,6 +452,8 @@ int front = q.front(); q.pop(); // FIFO: front = 1
 ```
 
 ---
+
+<a id="binary-search"></a>
 
 ## Binary Search
 
@@ -504,6 +512,8 @@ return -1;
 ```
 
 ---
+
+<a id="linked-lists"></a>
 
 ## Linked Lists
 
@@ -702,7 +712,9 @@ return d.next;
 
 ---
 
-## Trees & Tries
+<a id="trees"></a>
+
+## Trees ## Trees & Tries Tries
 
 ### 45. Divide and Conquer
 
@@ -1188,6 +1200,8 @@ void insert(T* root, const string& w) {
 
 ---
 
+<a id="graphs"></a>
+
 ## Graphs
 
 ### 75. Recursion
@@ -1407,6 +1421,8 @@ for(int i=0;i+1<(int)words.size();i++){
 ```
 
 ---
+
+<a id="dp"></a>
 
 ## Dynamic Programming
 
@@ -1697,7 +1713,9 @@ return best;
 
 ---
 
-## Intervals & Greedy
+<a id="intervals"></a>
+
+## Intervals ## Intervals & Greedy Greedy
 
 ### 106. Interval Problems
 
@@ -1791,6 +1809,8 @@ for(int i=1;i<(int)v.size();i++)
 ```
 
 ---
+
+<a id="matrices"></a>
 
 ## Matrices
 
@@ -1933,6 +1953,8 @@ return n+1;
 ```
 
 ---
+
+<a id="bit-manipulation"></a>
 
 ## Bit Manipulation
 
