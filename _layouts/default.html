@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ page.title | default: site.title }}</title>
+  <meta name="description" content="{{ page.description | default: site.description }}">
+  <link rel="stylesheet" href="{{ "/assets/css/style.css" | relative_url }}">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚡</text></svg>">
+</head>
+<body>
+  <a href="#main" class="skip-link">Skip to content</a>
+
+  <header class="site-header">
+    <div class="container">
+      <a class="site-title" href="{{ "/" | relative_url }}">{{ site.title }}</a>
+      <nav class="site-nav">
+        <a href="#arrays--hasing" class="nav-link">Arrays</a>
+        <a href="#two-pointers" class="nav-link">Two Pointers</a>
+        <a href="#stack--queue" class="nav-link">Stack</a>
+        <a href="#binary-search" class="nav-link">Binary</a>
+        <a href="#linked-lists" class="nav-link">Lists</a>
+        <a href="#trees" class="nav-link">Trees</a>
+        <a href="#graphs" class="nav-link">Graphs</a>
+        <a href="#dp" class="nav-link">DP</a>
+        <a href="#intervals" class="nav-link">Greedy</a>
+        <a href="#matrices" class="nav-link">Matrices</a>
+        <a href="#bit" class="nav-link">Bits</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main" class="container">
+    {{ content }}
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>Built with <a href="https://jekyllrb.com/">Jekyll</a> on <a href="https://pages.github.com/">GitHub Pages</a></p>
+    </div>
+  </footer>
+
+  <script src="{{ "/assets/js/navigation.js" | relative_url }}"></script>
+</body>
+</html>

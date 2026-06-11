@@ -1,0 +1,36 @@
+# ─── GitHub Pages / Jekyll Configuration ───
+
+title: C++ DSA Concepts Guide
+description: Pseudocode & Notes for Every Topic — 142 concepts across 11 categories
+baseurl: ""
+url: ""
+
+# GitHub Pages uses the `jekyll-paginate` and `minimal-light` themes
+# or the default theme.  We use the `minimal-light` look-alike via
+# the built-in `minima` theme, customised below.
+
+theme: minima
+
+# ─── Plugins ───
+plugins:
+  - jekyll-feed
+  - jekyll-seo-tag
+  - jekyll-sitemap
+
+# ─── Markdown ───
+markdown: kramdown
+kramdown:
+  syntax_highlighter: rouge
+  syntax_highlighter_opts:
+    css_class: "highlight"
+
+# ─── Permalink style ───
+permalink: pretty
+
+# ─── Defaults (so *.md files are processed through Jekyll) ───
+defaults:
+  - scope:
+      path: ""
+      type: "pages"
+    values:
+      layout: "default"
