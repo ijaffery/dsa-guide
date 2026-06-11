@@ -29,7 +29,7 @@ title: C++ DSA Concepts Guide
 
 <a id="arrays--hasing"></a>
 
-## Arrays ## Arrays & Hashing Hashing
+## Arrays & Hashing
 
 ### 1. Hash Sets
 
@@ -304,7 +304,7 @@ for (int x : nums)
 
 <a id="two-pointers"></a>
 
-## Two Pointers ## Two Pointers & Sliding Window Sliding Window
+## Two Pointers & Sliding Window
 
 ### 21. Two Pointers Technique
 
@@ -405,7 +405,7 @@ for (int hi = 0; hi < (int)s.size(); hi++) {
 
 <a id="stack"></a>
 
-## Stack ## Stack & Queue Queue
+## Stack & Queue
 
 ### 27. Stack Data Structure
 
@@ -714,7 +714,7 @@ return d.next;
 
 <a id="trees"></a>
 
-## Trees ## Trees & Tries Tries
+## Trees & Tries
 
 ### 45. Divide and Conquer
 
@@ -1715,7 +1715,7 @@ return best;
 
 <a id="intervals"></a>
 
-## Intervals ## Intervals & Greedy Greedy
+## Intervals & Greedy
 
 ### 106. Interval Problems
 

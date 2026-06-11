@@ -2,7 +2,7 @@
 
 title: C++ DSA Concepts Guide
 description: Pseudocode & Notes for Every Topic — 142 concepts across 11 categories
-baseurl: ""
+baseurl: "/cpp-dsa-guide"
 url: ""
 
 # GitHub Pages uses the `jekyll-paginate` and `minimal-light` themes
