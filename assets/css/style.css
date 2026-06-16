@@ -227,6 +227,10 @@ h2:nth-of-type(11)::before { background: var(--accent11); }
 hr { border: none; height: 1px; background: var(--border); margin: 3rem 0; }
 
 /* ─── Sub-headers ─── */
+/* Scroll margin ensures anchor links land below the fixed header (~60px) */
+h2, h3 {
+  scroll-margin-top: 60px;
+}
 h3 {
   font-size: 1.15rem; font-weight: 600;
   margin: 1.25rem 0 .5rem;
