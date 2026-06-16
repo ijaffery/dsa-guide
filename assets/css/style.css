@@ -47,7 +47,9 @@ html {
   scrollbar-width: thin;
   scrollbar-color: var(--border) transparent;
 }
+/* Header height = .75rem padding top + content (~32px) + .75rem padding bottom ≈ 56px */
 body {
+  padding-top: 56px; /* push content below fixed header */
   font-family: var(--font-sans);
   background: var(--bg);
   color: var(--fg);
@@ -73,9 +75,6 @@ a:hover { color: var(--accent2); text-decoration: underline; }
 
 /* ─── Container ─── */
 .container { max-width: var(--max-width); margin: 0 auto; padding: 0 2rem; }
-main.container {
-  padding-top: 5.5rem;
-}
 
 /* ─── Header ─── */
 .site-header {
