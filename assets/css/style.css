@@ -73,6 +73,9 @@ a:hover { color: var(--accent2); text-decoration: underline; }
 
 /* ─── Container ─── */
 .container { max-width: var(--max-width); margin: 0 auto; padding: 0 2rem; }
+main.container {
+  padding-top: 5.5rem;
+}
 
 /* ─── Header ─── */
 .site-header {
@@ -227,8 +230,8 @@ h2:nth-of-type(11)::before { background: var(--accent11); }
 hr { border: none; height: 1px; background: var(--border); margin: 3rem 0; }
 
 /* ─── Sub-headers ─── */
-/* Scroll margin ensures anchor links land below the fixed header (~60px) */
-h2, h3 {
+/* Scroll margin ensures anchor links and headings land below the fixed header (~60px) */
+h1, h2, h3 {
   scroll-margin-top: 60px;
 }
 h3 {
