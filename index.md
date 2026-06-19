@@ -31,7 +31,6 @@ Each code block is tagged with the specific problem it solves, so you can see th
 
 ---
 
-<a id="arrays--hashing"></a>
 
 ## Arrays & Hashing
 
@@ -306,7 +305,6 @@ for (int x : nums)
 
 ---
 
-<a id="two-pointers--sliding-window"></a>
 
 ## Two Pointers & Sliding Window
 
@@ -408,7 +406,6 @@ for (int p : prices) {
 
 ---
 
-<a id="stack--queue"></a>
 
 ## Stack & Queue
 
@@ -450,7 +447,6 @@ int front = q.front(); q.pop(); // FIFO: front = 1
 
 ---
 
-<a id="binary-search"></a>
 
 ## Binary Search
 
@@ -511,7 +507,6 @@ return -1;
 
 ---
 
-<a id="linked-lists"></a>
 
 ## Linked Lists
 
@@ -673,7 +668,6 @@ ListNode* mergeK(vector<ListNode*>& L, int l, int r) {
 
 ---
 
-<a id="trees--tries"></a>
 
 ## Trees & Tries
 
@@ -992,7 +986,6 @@ for (char c : s) {
 
 ---
 
-<a id="graphs"></a>
 
 ## Graphs
 
@@ -1169,7 +1162,6 @@ for (int i = 0; i + 1 < (int)words.size(); i++) {
 
 ---
 
-<a id="dynamic-programming"></a>
 
 ## Dynamic Programming
 
@@ -1400,7 +1392,6 @@ for (int i = 0; i < n; i++) {
 
 ---
 
-<a id="intervals--greedy"></a>
 
 ## Intervals & Greedy
 
@@ -1485,7 +1476,6 @@ int idx = (int)(it - ends.begin()) - 1; // last compatible interval
 
 ---
 
-<a id="matrices"></a>
 
 ## Matrices
 
@@ -1604,7 +1594,6 @@ return n + 1;
 
 ---
 
-<a id="bit-manipulation"></a>
 
 ## Bit Manipulation
 
@@ -1720,7 +1709,6 @@ return (int)(expected - actual);
 
 ---
 
-<a id="backtracking-bonus"></a>
 
 ## Backtracking (Bonus)
 
@@ -1764,7 +1752,6 @@ bool dfs(vector<vector<char>>& board, string& word, int r, int c, int i) {
 
 ---
 
-<a id="additional-concepts"></a>
 
 ## Additional Concepts
 
