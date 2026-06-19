@@ -9,7 +9,7 @@ url: ""
 # or the default theme.  We use the `minimal-light` look-alike via
 # the built-in `minima` theme, customised below.
 
-theme: minima
+# theme: minima  -- we serve assets/css/style.css directly; no SCSS pipeline needed
 
 # ─── Plugins ───
 plugins:

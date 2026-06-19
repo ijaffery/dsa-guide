@@ -56,7 +56,7 @@ for (char c : s) freq[c - 'a']++;
 
 An unordered collection of unique elements with O(1) average insert, delete, and lookup. Use it to answer "have I seen this before?" in constant time. Backed by a hash table; worst case O(n) due to collisions but rare in practice.
 
-> **📐 Math:** Expected collisions for n items into a table of size m (load factor α = n/m) follow the birthday-problem approximation: P(collision) ≈ 1 − e^(−n²/2m). This is why hash tables resize (double m) once α exceeds ~0.7 — it keeps expected probe length near O(1).
+> **📐 Math:** Expected collisions for $n$ items into a table of size $m$ (load factor $\alpha = n/m$) follow the birthday-problem approximation: $P(\text{collision}) \approx 1 - e^{-n^2/2m}$. This is why hash tables resize (double $m$) once $\alpha$ exceeds ~0.7 — it keeps expected probe length near $O(1)$.
 
 **Problem:** *Contains Duplicate* — return true if any value appears more than once in `nums`.
 
@@ -125,7 +125,7 @@ return s.size() == t.size();
 
 Rearranging elements into a defined order. Once sorted, many problems become tractable: binary search, two-pointer, duplicate detection, and interval merging all require sorted input. `std::sort` is O(n log n) and accepts a custom comparator lambda.
 
-> **📐 Math:** Comparison sorts are bounded below by Ω(n log n): there are n! possible orderings, and each comparison gives at most 1 bit of information, so you need at least log₂(n!) ≈ n log₂n − 1.44n comparisons (Stirling's approximation) to distinguish them all.
+> **📐 Math:** Comparison sorts are bounded below by $\Omega(n \log n)$: there are $n!$ possible orderings, and each comparison gives at most 1 bit of information, so you need at least $\log_2(n!) \approx n \log_2 n - 1.44n$ comparisons (Stirling's approximation) to distinguish them all.
 
 **Problem:** Sort `nums` ascending, or descending with a custom comparator — the foundation for two-pointer and interval problems.
 
@@ -142,7 +142,7 @@ sort(v.begin(), v.end(), [](int a, int b){
 
 The simplest strategy: compare every pair with two nested loops. O(n²) time, O(1) space. Rarely optimal but always correct — useful as a baseline or when n is very small.
 
-> **📐 Math:** n(n−1)/2 pairs are compared in the worst case — the sum of (n−1) + (n−2) + ... + 1, i.e. an arithmetic series, which is exactly where the n² term comes from.
+> **📐 Math:** $n(n-1)/2$ pairs are compared in the worst case — the sum of $(n-1) + (n-2) + \ldots + 1$, i.e. an arithmetic series, which is exactly where the $n^2$ term comes from.
 
 **Problem:** *Contains Duplicate*, brute-force version — compare every pair before reaching for a hash set.
 
@@ -191,7 +191,7 @@ int top = minH.top(); minH.pop();
 
 Instead of comparing elements, place each value into a bucket whose index equals the value. Reading buckets in order produces a sorted result in O(n). Ideal when the value range is bounded, e.g. frequencies 1 to n.
 
-> **📐 Math:** Bucket sort is O(n) only because the value range is bounded by n: with n buckets holding n total elements, total work across all buckets is O(n) even though each bucket might be scanned individually. This breaks down to O(n log n) (comparison-sort territory) once bucket sizes aren't bounded by a constant.
+> **📐 Math:** Bucket sort is $O(n)$ only because the value range is bounded by $n$: with $n$ buckets holding $n$ total elements, total work across all buckets is $O(n)$ even though each bucket might be scanned individually. This breaks down to $O(n \log n)$ (comparison-sort territory) once bucket sizes aren't bounded by a constant.
 
 **Problem:** *Top K Frequent Elements* — bucket elements by frequency count (1..n), then read off the top k from the highest-frequency bucket down.
 
@@ -228,7 +228,7 @@ string encode(vector<string>& strs) {
 
 Precompute cumulative sums or products so any subarray query is O(1). For products-excluding-self, make two passes: left-to-right accumulating the left product, then right-to-left accumulating the right product. The same two-pass shape works for prefix sums.
 
-> **📐 Math:** If P[i] = nums[0]·nums[1]·...·nums[i−1] (left product) and S[i] = nums[i+1]·...·nums[n−1] (right product), then answer[i] = P[i]·S[i] — the product of everything except nums[i]. Computing P and S each take one O(n) pass, and they can be folded into a single output array to get O(1) extra space.
+> **📐 Math:** If $P[i] = \text{nums}[0] \cdot \text{nums}[1] \cdot \ldots \cdot \text{nums}[i-1]$ (left product) and $S[i] = \text{nums}[i+1] \cdot \ldots \cdot \text{nums}[n-1]$ (right product), then $\text{answer}[i] = P[i] \cdot S[i]$ — the product of everything except $\text{nums}[i]$. Computing $P$ and $S$ each take one $O(n)$ pass, and they can be folded into a single output array to get $O(1)$ extra space.
 
 **Problem:** *Product of Array Except Self* — compute, for each index, the product of every other element without using division.
 
@@ -345,7 +345,7 @@ for (int i = 0; i < n; i++) {
 
 A variable- or fixed-size window defined by two pointers. Expand the right pointer to grow; shrink the left pointer when a constraint is violated. Achieves O(n) for problems that would otherwise be O(n²). For a *fixed*-size window, no shrinking logic is needed — just subtract the element leaving and add the one entering.
 
-> **📐 Math:** Despite the nested-looking while loop, total pointer movement is bounded: `lo` and `hi` each move forward at most n times across the whole run, never backward. So total work is O(n) + O(n) = O(n), not O(n²) — this is the *amortized* argument that makes sliding window linear.
+> **📐 Math:** Despite the nested-looking while loop, total pointer movement is bounded: `lo` and `hi` each move forward at most $n$ times across the whole run, never backward. So total work is $O(n) + O(n) = O(n)$, not $O(n^2)$ — this is the *amortized* argument that makes sliding window linear.
 
 **Problem:** *Longest Substring Without Repeating Characters* (variable window) and *Maximum Sum Subarray of Size K* (fixed window).
 
@@ -375,7 +375,7 @@ for (int i = k; i < (int)nums.size(); i++) {
 
 Track how many times each element appears inside the current window. The maximum frequency determines whether the window can be made uniform with at most k replacements.
 
-> **📐 Math:** If a window of length L has max character frequency f, it can be made uniform with L − f replacements (replace everything that isn't the majority character). The window is valid exactly when L − f ≤ k, i.e. (hi − lo + 1) − maxFreq ≤ k — that single inequality is the entire correctness argument for the shrink condition.
+> **📐 Math:** If a window of length $L$ has max character frequency $f$, it can be made uniform with $L - f$ replacements (replace everything that isn't the majority character). The window is valid exactly when $L - f \le k$, i.e. $(hi - lo + 1) - \text{maxFreq} \le k$ — that single inequality is the entire correctness argument for the shrink condition.
 
 **Problem:** *Longest Repeating Character Replacement* — find the longest substring that can become all-one-character with at most `k` swaps.
 
@@ -394,7 +394,7 @@ for (int hi = 0; hi < (int)s.size(); hi++) {
 
 At each step commit to the locally optimal choice and never reconsider it. Works when the problem has the *greedy-choice property*: local optima compose into a global optimum. Examples: buy-sell stock, jump game, interval scheduling.
 
-> **📐 Math:** Greedy correctness requires proving the *exchange argument*: any optimal solution can be transformed, step by step, into the greedy solution without making it worse. For buy-low-sell-high, tracking running min m and updating profit = max(profit, price − m) works because the best sell day for any fixed buy day is irrelevant — only the cheapest price-so-far matters, so a single pass suffices instead of checking all O(n²) buy/sell pairs.
+> **📐 Math:** Greedy correctness requires proving the *exchange argument*: any optimal solution can be transformed, step by step, into the greedy solution without making it worse. For buy-low-sell-high, tracking running min $m$ and updating $\text{profit} = \max(\text{profit}, \text{price} - m)$ works because the best sell day for any fixed buy day is irrelevant — only the cheapest price-so-far matters, so a single pass suffices instead of checking all $O(n^2)$ buy/sell pairs.
 
 **Problem:** *Best Time to Buy and Sell Stock* — maximize profit from a single buy and a later sell.
 
@@ -458,7 +458,7 @@ int front = q.front(); q.pop(); // FIFO: front = 1
 
 Repeatedly halve the search space by comparing the middle element to the target. Requires a sorted (or monotone) input. Always compute `mid = left + (right - left) / 2` to avoid integer overflow. Time O(log n).
 
-> **📐 Math:** Each iteration discards half the remaining search space, so after t iterations the space shrinks from n to n/2^t. Solving n/2^t = 1 gives t = log₂n — the source of binary search's O(log n) bound.
+> **📐 Math:** Each iteration discards half the remaining search space, so after $t$ iterations the space shrinks from $n$ to $n/2^t$. Solving $n/2^t = 1$ gives $t = \log_2 n$ — the source of binary search's $O(\log n)$ bound.
 
 **Problem:** *Binary Search* — find the index of `target` in a sorted array, or −1 if absent.
 
@@ -479,7 +479,7 @@ return -1;
 
 A rotated sorted array splits into two sorted halves. Exactly one of the two halves defined by `mid` is always fully sorted — use that to determine which half the target lies in. To find the minimum specifically, compare `nums[mid]` to `nums[hi]` instead.
 
-> **📐 Math:** Comparing nums[mid] to nums[hi] (not nums[lo]) handles duplicates and avoids edge-case ambiguity: if nums[mid] > nums[hi], the minimum must lie strictly to the right of mid (since a sorted run can't 'wrap' over a larger value), so lo = mid+1 is always safe to discard mid itself.
+> **📐 Math:** Comparing $\text{nums}[mid]$ to $\text{nums}[hi]$ (not $\text{nums}[lo]$) handles duplicates and avoids edge-case ambiguity: if $\text{nums}[mid] > \text{nums}[hi]$, the minimum must lie strictly to the right of $mid$ (since a sorted run can't 'wrap' over a larger value), so $lo = mid+1$ is always safe to discard $mid$ itself.
 
 **Problem:** *Find Minimum in Rotated Sorted Array* and *Search in Rotated Sorted Array*.
 
@@ -542,7 +542,7 @@ cur           = nxt;       // advance cur
 
 Prepend a sentinel node so the head can be treated like any other node. Eliminates special-casing the head in insertions and deletions. Return `dummy.next` as the new head. The same trick powers *Remove Nth Node From End*: advance a leader pointer n steps ahead, then walk both pointers until the leader hits `nullptr` — the trailer is now just before the target.
 
-> **📐 Math:** Advancing `fast` n steps ahead first creates a fixed gap of n between `fast` and `prev`. When `fast` reaches the end (position L, the list length), `prev` is at position L − n — exactly one before the node to remove. This converts a two-pass problem (count length, then remove) into one pass.
+> **📐 Math:** Advancing `fast` $n$ steps ahead first creates a fixed gap of $n$ between `fast` and `prev`. When `fast` reaches the end (position $L$, the list length), `prev` is at position $L - n$ — exactly one before the node to remove. This converts a two-pass problem (count length, then remove) into one pass.
 
 **Problem:** *Remove Nth Node From End of List* — delete the nth node from the end in a single pass.
 
@@ -561,7 +561,7 @@ return dummy.next;
 
 Two pointers advancing at different speeds (1 vs 2 steps). When fast reaches the end, slow is at the midpoint. If there is a cycle, the pointers will eventually meet. To find the cycle's *entry point*, reset one pointer to head and advance both one step at a time — they will meet exactly at the start of the cycle.
 
-> **📐 Math:** If a cycle exists with the fast pointer moving 2 steps/tick and slow 1 step/tick, the gap between them shrinks by exactly 1 each tick. Since the gap is bounded by the cycle length L, they must meet within at most L ticks. Let `a` be the distance from head to the cycle start and `c` the cycle length. By the first meeting, slow has traveled `a+x` and fast `a+x+nc` for some `x ≥ 0, n ≥ 1`; since fast moves twice as fast, `2(a+x) = a+x+nc`, so `a = nc − x`. That's exactly why resetting one pointer to head and advancing both at speed 1 makes them meet at the cycle's entrance.
+> **📐 Math:** If a cycle exists with the fast pointer moving 2 steps/tick and slow 1 step/tick, the gap between them shrinks by exactly 1 each tick. Since the gap is bounded by the cycle length $L$, they must meet within at most $L$ ticks. Let $a$ be the distance from head to the cycle start and $c$ the cycle length. By the first meeting, slow has traveled $a+x$ and fast $a+x+nc$ for some $x \ge 0, n \ge 1$; since fast moves twice as fast, $2(a+x) = a+x+nc$, so $a = nc - x$. That's exactly why resetting one pointer to head and advancing both at speed 1 makes them meet at the cycle's entrance.
 
 **Problem:** *Linked List Cycle* (detect) and *Linked List Cycle II* (find entry point).
 
@@ -584,7 +584,7 @@ return slow; // cycle entry node
 
 Change each node's `next` pointer to its predecessor. Requires three variables: `prev`, `cur`, `nxt`. After the loop `prev` is the new head. Can also be done recursively, mirroring the list structure.
 
-> **📐 Math:** Reversal is a bijection that maps node i's `next` pointer backward: in the new list, what was `prev` becomes the successor of `cur`. After n steps every pointer has flipped exactly once, so the total work is O(n) with no extra space — it's just relabeling n arrows, not rebuilding the list.
+> **📐 Math:** Reversal is a bijection that maps node $i$'s `next` pointer backward: in the new list, what was `prev` becomes the successor of `cur`. After $n$ steps every pointer has flipped exactly once, so the total work is $O(n)$ with no extra space — it's just relabeling $n$ arrows, not rebuilding the list.
 
 **Problem:** *Reverse Linked List* — reverse a singly linked list in place.
 
@@ -614,7 +614,7 @@ ListNode* reverse(ListNode* head) {
 
 Compare the heads of both lists, attach the smaller node to the result, and advance that pointer — used to merge two *sorted* lists. A different pattern, interleaving, alternates picking from each list regardless of value — used in *Reorder List* after finding the midpoint and reversing the second half.
 
-> **📐 Math:** Each comparison advances exactly one of the two list pointers, and the loop ends when one list is exhausted. Since the pointers together can advance at most n + m times total, the merge is O(n+m), not O(n·m).
+> **📐 Math:** Each comparison advances exactly one of the two list pointers, and the loop ends when one list is exhausted. Since the pointers together can advance at most $n + m$ times total, the merge is $O(n+m)$, not $O(n \cdot m)$.
 
 **Problem:** *Merge Two Sorted Lists* and *Reorder List*.
 
@@ -646,7 +646,7 @@ while (p2) {
 
 Two strategies for merging k sorted lists: (1) a min-heap of `(value, node)` pairs, always extracting the globally smallest node in O(log k); (2) divide-and-conquer, pairing up lists and merging recursively.
 
-> **📐 Math:** With k lists and total N nodes, the heap approach costs O(N log k) — each of N extractions costs O(log k) since the heap never holds more than k nodes. The divide-and-conquer approach achieves the same bound via the recurrence T(k) = 2T(k/2) + O(N), which the Master Theorem solves to O(N log k) — same total work, distributed across log₂k merge rounds instead of one heap.
+> **📐 Math:** With $k$ lists and total $N$ nodes, the heap approach costs $O(N \log k)$ — each of $N$ extractions costs $O(\log k)$ since the heap never holds more than $k$ nodes. The divide-and-conquer approach achieves the same bound via the recurrence $T(k) = 2T(k/2) + O(N)$, which the Master Theorem solves to $O(N \log k)$ — same total work, distributed across $\log_2 k$ merge rounds instead of one heap.
 
 **Problem:** *Merge k Sorted Lists*.
 
@@ -681,7 +681,7 @@ ListNode* mergeK(vector<ListNode*>& L, int l, int r) {
 
 Each node has at most two children (left and right). Every recursive tree function follows the same shape: (1) handle the `nullptr` base case, (2) process the current node, (3) recurse left, (4) recurse right. Three orderings name *where* step 2 happens: preorder (root first — good for serializing/cloning), inorder (root between children — sorted output for a BST), postorder (root last — use when a parent's result depends on its children, e.g. height or diameter).
 
-> **📐 Math:** A balanced binary tree with n nodes has height h ≈ log₂n, since each level can hold up to 2^level nodes and the levels sum to n = 2^0 + 2^1 + ... + 2^h — this is why balanced-tree operations are O(log n). Tree recursion that does O(1) work per node and visits both children follows T(n) = 2T(n/2) + O(1), which the Master Theorem solves to O(n) total: every node is visited exactly once.
+> **📐 Math:** A balanced binary tree with $n$ nodes has height $h \approx \log_2 n$, since each level can hold up to $2^{\text{level}}$ nodes and the levels sum to $n = 2^0 + 2^1 + \ldots + 2^h$ — this is why balanced-tree operations are $O(\log n)$. Tree recursion that does $O(1)$ work per node and visits both children follows $T(n) = 2T(n/2) + O(1)$, which the Master Theorem solves to $O(n)$ total: every node is visited exactly once.
 
 **Problem:** *Maximum Depth of Binary Tree* (postorder) and general traversal order (preorder/inorder/postorder), as used throughout tree problems.
 
@@ -792,7 +792,7 @@ bool isBalanced(TreeNode* n) {
 
 All values in the left subtree must be strictly less than the node; all in the right subtree strictly greater — for *every* ancestor, not just the immediate parent. Pass a shrinking `(lo, hi)` range down each recursive call: going left tightens `hi` to the parent's value, going right tightens `lo`.
 
-> **📐 Math:** BST validation is an inductive argument — if every node respects the (lo, hi) bound passed to it, the whole subtree is a valid BST. Going left tightens hi to the parent's value (everything in the left subtree must be less than the parent); going right tightens lo. This proves the BST property level by level instead of just checking the immediate parent.
+> **📐 Math:** BST validation is an inductive argument — if every node respects the $(lo, hi)$ bound passed to it, the whole subtree is a valid BST. Going left tightens $hi$ to the parent's value (everything in the left subtree must be less than the parent); going right tightens $lo$. This proves the BST property level by level instead of just checking the immediate parent.
 
 **Problem:** *Validate Binary Search Tree*.
 
@@ -812,7 +812,7 @@ bool validate(TreeNode* n, long lo, long hi) {
 
 Inorder traversal of a BST yields values in strictly increasing order, because of the BST invariant (left < node < right) applied recursively. Decrement a counter `k` during inorder traversal to find the kth smallest in O(h + k) — no need to traverse the whole tree or sort all n values.
 
-> **📐 Math:** Inorder = sorted order is itself an inductive proof from the BST invariant. Decrementing k as you go means you stop as soon as you've seen k nodes, giving O(h + k) instead of O(n) for a full traversal plus sort.
+> **📐 Math:** Inorder = sorted order is itself an inductive proof from the BST invariant. Decrementing $k$ as you go means you stop as soon as you've seen $k$ nodes, giving $O(h + k)$ instead of $O(n)$ for a full traversal plus sort.
 
 **Problem:** *Kth Smallest Element in a BST*.
 
@@ -849,7 +849,7 @@ int goodNodes(TreeNode* n, int mx) {
 
 Recurse into children first, then compute the parent's result from the children's return values. Two results are often needed simultaneously: a *local* value the parent can extend upward (only one branch, since a path through the parent can only continue in one direction), and a *global* best that considers both branches meeting at the current node (the only place a "V-shaped" path can be counted).
 
-> **📐 Math:** local(n) = val + max(l, r) extends only ONE branch upward. globalMax = max(globalMax, l + val + r) considers BOTH branches meeting at this node. Since depth/gain is computed once per node bottom-up, total work is O(n) even though the optimal path could connect nodes anywhere in the tree.
+> **📐 Math:** $\text{local}(n) = \text{val} + \max(l, r)$ extends only ONE branch upward. $\text{globalMax} = \max(\text{globalMax}, l + \text{val} + r)$ considers BOTH branches meeting at this node. Since depth/gain is computed once per node bottom-up, total work is $O(n)$ even though the optimal path could connect nodes anywhere in the tree.
 
 **Problem:** *Diameter of Binary Tree* and *Binary Tree Maximum Path Sum*.
 
@@ -950,7 +950,7 @@ void dfs(Node* n) {
 
 A tree where each edge represents one character. All words sharing a prefix share the same path from the root. Supports O(m) insert and search where m is the word length — independent of how many words n are already stored, unlike scanning a word list (O(n·m)). Use a fixed `children[26]` array for O(1) access when the alphabet is small and known (a–z), or `unordered_map<char, Node*>` for a large or sparse alphabet. Wrap the root in a class to expose a clean `insert` / `search` interface.
 
-> **📐 Math:** A trie storing n words with average length m has O(n·m) nodes in the worst case (no shared prefixes), but lookup/insert is always O(m) — independent of n — because each step follows exactly one character down the tree.
+> **📐 Math:** A trie storing $n$ words with average length $m$ has $O(n \cdot m)$ nodes in the worst case (no shared prefixes), but lookup/insert is always $O(m)$ — independent of $n$ — because each step follows exactly one character down the tree.
 
 **Problem:** *Implement Trie (Prefix Tree)* and *Design Add and Search Words Data Structure* (the latter needs DFS to handle `.` wildcards).
 
@@ -1000,7 +1000,7 @@ for (char c : s) {
 
 Store a graph as an adjacency list: `vector<vector<int>> adj(n)`. For directed graphs add one direction; for undirected add both. Adjacency matrices cost O(V²) space — use only for dense graphs.
 
-> **📐 Math:** An adjacency list uses O(V + E) space (V node entries + one entry per edge), versus O(V²) for an adjacency matrix. For sparse graphs (E ≪ V²), the list representation is dramatically smaller — this is why adjacency lists dominate in most graph problems.
+> **📐 Math:** An adjacency list uses $O(V + E)$ space ($V$ node entries + one entry per edge), versus $O(V^2)$ for an adjacency matrix. For sparse graphs ($E \ll V^2$), the list representation is dramatically smaller — this is why adjacency lists dominate in most graph problems.
 
 **Pattern:** the standard setup step for almost every graph problem in this section (e.g. *Number of Islands*, *Course Schedule*), not a problem on its own.
 
@@ -1017,7 +1017,7 @@ adj[u].push_back(v); adj[v].push_back(u);  // undirected
 
 Graph DFS uses a visited array to avoid revisiting nodes and to detect cycles. Graph BFS guarantees the shortest path by hop count in unweighted graphs. Both run in O(V + E) since each node is visited once and each edge examined once.
 
-> **📐 Math:** Each node is visited once (marked in `vis`) and each edge examined once across the whole traversal, giving O(V + E) total — the fundamental complexity bound for any graph traversal that doesn't revisit nodes.
+> **📐 Math:** Each node is visited once (marked in `vis`) and each edge examined once across the whole traversal, giving $O(V + E)$ total — the fundamental complexity bound for any graph traversal that doesn't revisit nodes.
 
 **Problem:** *Number of Islands* (DFS flood fill) and *Course Schedule*-style reachability (BFS).
 
@@ -1044,7 +1044,7 @@ while (!q.empty()) {
 
 Seed the queue with *all* source cells at once, each at distance 0, rather than running single-source BFS repeatedly. This guarantees each cell's first-visit distance is its true minimum distance to the nearest source. The same seeding trick — flood-fill from every boundary cell — identifies which interior regions are reachable from the boundary versus fully enclosed.
 
-> **📐 Math:** Multi-source BFS explores all cells at distance d from ANY source before any cell at distance d+1, because every source starts in the queue at depth 0 simultaneously. This guarantees each cell's first-visit distance is its true minimum distance to the nearest source — same correctness argument as single-source BFS, just with multiple depth-0 starting points.
+> **📐 Math:** Multi-source BFS explores all cells at distance $d$ from ANY source before any cell at distance $d+1$, because every source starts in the queue at depth 0 simultaneously. This guarantees each cell's first-visit distance is its true minimum distance to the nearest source — same correctness argument as single-source BFS, just with multiple depth-0 starting points.
 
 **Problem:** *Rotting Oranges* (multi-source distance) and *Surrounded Regions* (boundary flood-fill).
 
@@ -1068,7 +1068,7 @@ while (!q.empty()) {
 
 Tracks which elements belong to the same connected component. `find` with path compression returns the representative in nearly O(1) by collapsing every visited node directly to the root. `union` by rank merges two components, attaching the shorter tree under the taller one's root.
 
-> **📐 Math:** Path compression makes find() collapse every visited node directly to the root, so repeated calls flatten the tree. Combined with union-by-rank, the amortized cost per operation is O(α(n)) — the inverse Ackermann function, which grows so slowly it's effectively constant (under 5) for any n you could ever construct.
+> **📐 Math:** Path compression makes `find()` collapse every visited node directly to the root, so repeated calls flatten the tree. Combined with union-by-rank, the amortized cost per operation is $O(\alpha(n))$ — the inverse Ackermann function, which grows so slowly it's effectively constant (under 5) for any $n$ you could ever construct.
 
 **Problem:** *Number of Connected Components in an Undirected Graph* and *Redundant Connection*.
 
@@ -1095,7 +1095,7 @@ A linear ordering of a DAG's nodes such that for every edge u → v, u appears b
 - **Kahn's algorithm (BFS):** compute in-degrees, enqueue all zero-in-degree nodes, repeatedly dequeue and decrement neighbors' in-degrees, enqueuing any that reach zero. If the output contains all n nodes, the graph has no cycle. (In a course-prerequisite framing, in-degree = number of remaining prerequisites.)
 - **DFS post-order reversed:** a node is pushed onto a stack only after all its descendants are pushed, so reading the stack top-to-bottom satisfies the ordering.
 
-> **📐 Math:** Kahn's algorithm is a proof by construction: a DAG with n nodes always has at least one node with in-degree 0 (otherwise every node has a predecessor, forcing a cycle by pigeonhole). Repeatedly removing such nodes processes all n nodes iff the graph is acyclic. The DFS variant relies on the same fact from the other direction: postorder pushes node u only after every node reachable from u, so reversing the stack guarantees u precedes v for every edge u→v.
+> **📐 Math:** Kahn's algorithm is a proof by construction: a DAG with $n$ nodes always has at least one node with in-degree 0 (otherwise every node has a predecessor, forcing a cycle by pigeonhole). Repeatedly removing such nodes processes all $n$ nodes iff the graph is acyclic. The DFS variant relies on the same fact from the other direction: postorder pushes node $u$ only after every node reachable from $u$, so reversing the stack guarantees $u$ precedes $v$ for every edge $u \to v$.
 
 **Problem:** *Course Schedule* (cycle check) and *Course Schedule II* (return the ordering).
 
@@ -1194,7 +1194,7 @@ dp[0] = baseValue;
 for (int i = 1; i <= n; i++) dp[i] = combine(dp[i - 1]);
 ```
 
-> **📐 Math:** Naive recursion without memoization recomputes overlapping subproblems exponentially often — e.g. fib(n) makes O(2ⁿ) calls because fib(n-2) is recomputed independently inside both fib(n-1) and the direct fib(n-2) branch. Caching collapses this to O(n) since each of the n distinct subproblems is solved exactly once. Naive Fibonacci's call count grows like φⁿ where φ = (1+√5)/2 ≈ 1.618 (the golden ratio) — that's the blowup memoization eliminates.
+> **📐 Math:** Naive recursion without memoization recomputes overlapping subproblems exponentially often — e.g. fib$(n)$ makes $O(2^n)$ calls because fib$(n-2)$ is recomputed independently inside both fib$(n-1)$ and the direct fib$(n-2)$ branch. Caching collapses this to $O(n)$ since each of the $n$ distinct subproblems is solved exactly once. Naive Fibonacci's call count grows like $\varphi^n$ where $\varphi = (1+\sqrt{5})/2 \approx 1.618$ (the golden ratio) — that's the blowup memoization eliminates.
 
 ---
 
@@ -1202,7 +1202,7 @@ for (int i = 1; i <= n; i++) dp[i] = combine(dp[i - 1]);
 
 A 1-D array `dp[i]` stores the answer for a subproblem of size i, related to previous entries by a recurrence. *Climbing Stairs*: `dp[i] = dp[i-1] + dp[i-2]` (you reach step i via a final 1-step or a final 2-step). *House Robber*: `dp[i] = max(dp[i-1], dp[i-2] + nums[i])` (skip house i, or rob it and skip house i-1). Both recurrences depend on only the two previous values, so they collapse to two rolling variables — O(n) time, O(1) space.
 
-> **📐 Math:** House Robber's recurrence encodes a binary choice at each house: skip it (carry forward dp[i-1]) or rob it (dp[i-2] plus its value, since the adjacent house must then be skipped). Climbing Stairs is structurally identical to the Fibonacci recurrence — from step i you could have taken a final 1-step (from i-1) or 2-step (from i-2), and these cases are mutually exclusive and exhaustive.
+> **📐 Math:** House Robber's recurrence encodes a binary choice at each house: skip it (carry forward $\text{dp}[i-1]$) or rob it ($\text{dp}[i-2]$ plus its value, since the adjacent house must then be skipped). Climbing Stairs is structurally identical to the Fibonacci recurrence — from step $i$ you could have taken a final 1-step (from $i-1$) or 2-step (from $i-2$), and these cases are mutually exclusive and exhaustive.
 
 **Problem:** *Climbing Stairs* and *House Robber*.
 
@@ -1230,7 +1230,7 @@ int rob(vector<int>& nums) {
 
 The circular variant cannot rob both the first and last house, since they're adjacent on the circle. Solve two linear sub-problems — exclude the last house, or exclude the first — and take the maximum. Each sub-problem is identical to the original linear House Robber.
 
-> **📐 Math:** Splitting the circular case into linear(0, n-2) and linear(1, n-1) works because in any valid (non-adjacent) selection, house 0 and house n-1 can never both be chosen. So the true optimum must exclude at least one of them, and checking both exclusions covers every possibility.
+> **📐 Math:** Splitting the circular case into linear$(0, n-2)$ and linear$(1, n-1)$ works because in any valid (non-adjacent) selection, house $0$ and house $n-1$ can never both be chosen. So the true optimum must exclude at least one of them, and checking both exclusions covers every possibility.
 
 **Problem:** *House Robber II*.
 
@@ -1249,7 +1249,7 @@ return max(linear(0, n-2), linear(1, n-1));
 
 The state is the remaining amount; the transition tries every coin denomination and takes the best result. Top-down: recurse on `amount - coin` for each coin, memoizing on the remaining amount. Bottom-up: fill `dp[amt]` from the smallest amount upward — `dp[a] = min` over all coins `c` of `dp[a-c] + 1`, which is really a shortest-path recurrence where each coin is a "cost 1" edge.
 
-> **📐 Math:** Without memoization, coin change explores a branching tree of depth up to `amount` with up to `len(coins)` branches per node — O(coins^amount) worst case. Memoizing (or tabulating) on the remaining amount collapses this to O(amount · coins), since there are only `amount` distinct subproblems. The bottom-up recurrence dp[a] = min(dp[a-c] + 1) is the same shortest-path idea: dp[a] is the shortest path from 0 to a where each coin is an edge of cost 1.
+> **📐 Math:** Without memoization, coin change explores a branching tree of depth up to `amount` with up to `\text{len(coins)}` branches per node — $O(\text{coins}^\text{amount})$ worst case. Memoizing (or tabulating) on the remaining amount collapses this to $O(\text{amount} \cdot \text{coins})$, since there are only `amount` distinct subproblems. The bottom-up recurrence $\text{dp}[a] = \min(\text{dp}[a-c] + 1)$ is the same shortest-path idea: $\text{dp}[a]$ is the shortest path from 0 to $a$ where each coin is an edge of cost 1.
 
 **Problem:** *Coin Change* — fewest coins to make a target amount.
 
@@ -1289,7 +1289,7 @@ return dp[n];
 
 `dp[i]` = max subarray sum ending at index i = `max(nums[i], dp[i-1] + nums[i])` — at each index, either extend the previous subarray or start fresh. Only the previous state is needed, so the running version uses O(1) space instead of a full DP array.
 
-> **📐 Math:** The recurrence cur = max(nums[i], cur + nums[i]) makes a binary decision at each index — start a new subarray here, or extend the previous one. Because this only depends on the immediately preceding cur, the whole problem collapses from checking all O(n²) subarrays to a single O(n) pass.
+> **📐 Math:** The recurrence $\text{cur} = \max(\text{nums}[i], \text{cur} + \text{nums}[i])$ makes a binary decision at each index — start a new subarray here, or extend the previous one. Because this only depends on the immediately preceding `cur`, the whole problem collapses from checking all $O(n^2)$ subarrays to a single $O(n)$ pass.
 
 **Problem:** *Maximum Subarray*.
 
@@ -1308,7 +1308,7 @@ return best;
 
 Unlike sums, a very negative product can become the maximum after multiplying by another negative number. Track both `curMax` and `curMin` at each step, swapping them whenever the current element is negative, then apply Kadane's-style recurrence to both.
 
-> **📐 Math:** Since two negatives multiply to a positive, the maximum product ending at index i might come from the *minimum* (most negative) product ending at i-1, if nums[i] is negative. Tracking both curMax and curMin (swapping them when nums[i] < 0) covers both cases — a single running max isn't enough for products the way it is for sums.
+> **📐 Math:** Since two negatives multiply to a positive, the maximum product ending at index $i$ might come from the *minimum* (most negative) product ending at $i-1$, if $\text{nums}[i]$ is negative. Tracking both `curMax` and `curMin` (swapping them when $\text{nums}[i] < 0$) covers both cases — a single running max isn't enough for products the way it is for sums.
 
 **Problem:** *Maximum Product Subarray*.
 
@@ -1329,7 +1329,7 @@ return res;
 
 Counting monotone paths (only right or down moves) in an m×n grid equals the binomial coefficient `C(m+n-2, m-1)` — choosing which moves are "down" out of all moves. The DP formulation builds the same answer without factorials: `dp[i][j] = dp[i-1][j] + dp[i][j-1]`, since each cell is reachable only from above or from the left.
 
-> **📐 Math:** dp[i][j] = dp[i-1][j] + dp[i][j-1] is Pascal's triangle in disguise — it computes C(m+n-2, m-1) by summing the two ways to arrive at each cell, without ever computing a factorial.
+> **📐 Math:** $\text{dp}[i][j] = \text{dp}[i-1][j] + \text{dp}[i][j-1]$ is Pascal's triangle in disguise — it computes $C(m+n-2, m-1)$ by summing the two ways to arrive at each cell, without ever computing a factorial.
 
 **Problem:** *Unique Paths*.
 
@@ -1362,7 +1362,7 @@ for (int i = 0; i < m; i++)
 
 A 2-D table `dp[i][j]` parameterized by two indices — here, the start and end of a substring. `dp[i][j]` stores whether `s[i..j]` is a palindrome, built from the inside out: a substring is a palindrome if its outer characters match and the inner substring (already computed) is also a palindrome.
 
-> **📐 Math:** The recurrence dp[i][j] = (s[i]==s[j]) && (j-i<3 || dp[i+1][j-1]) reduces an O(n) palindrome check to O(1) by reusing the already-computed answer for the inner substring — the j-i<3 guard handles base cases of length 1–2 where there's no valid 'inner' substring to check.
+> **📐 Math:** The recurrence $\text{dp}[i][j] = (s[i] == s[j]) \land (j - i < 3 \lor \text{dp}[i+1][j-1])$ reduces an $O(n)$ palindrome check to $O(1)$ by reusing the already-computed answer for the inner substring — the $j-i < 3$ guard handles base cases of length 1–2 where there's no valid 'inner' substring to check.
 
 **Problem:** *Longest Palindromic Substring* (table-building step) and *Palindromic Substrings*.
 
@@ -1381,7 +1381,7 @@ for (int i = n - 2; i >= 0; i--)
 
 An O(n) algorithm for finding all palindromic substrings, improving on the O(n²) expand-around-center approach. It reuses previously computed palindrome radii: if a palindrome centered at `c` extends to radius `r`, and index `i` is inside that palindrome, then `i`'s radius is at least `min(r - i, radius of i's mirror)` — because the structure is mirrored around `c`.
 
-> **📐 Math:** Manacher's algorithm exploits palindrome symmetry: if a palindrome centered at c extends to radius r, and i is inside that palindrome, then p[i] is at least min(r - i, p[mirror of i]). This avoids redundant character comparisons, bringing the whole algorithm down to O(n) versus O(n²) for the naive expand-around-center approach.
+> **📐 Math:** Manacher's algorithm exploits palindrome symmetry: if a palindrome centered at $c$ extends to radius $r$, and $i$ is inside that palindrome, then $p[i]$ is at least $\min(r - i, p[\text{mirror of } i])$. This avoids redundant character comparisons, bringing the whole algorithm down to $O(n)$ versus $O(n^2)$ for the naive expand-around-center approach.
 
 **Problem:** *Longest Palindromic Substring*, optimal O(n) solution.
 
@@ -1440,7 +1440,7 @@ for (int i = 1; i < (int)v.size(); i++)
 
 Model interval events as points on a timeline: +1 at each interval's start, -1 at each end. Sort all events and scan left to right with a running counter. The peak value of that counter is the maximum number of simultaneously active intervals.
 
-> **📐 Math:** Encoding each interval as a +1 event at its start and a -1 event at its end converts 'how many intervals overlap at time t' into a running sum problem: sorting all 2n events and scanning left to right, the running counter at any point equals exactly the number of active intervals there — the peak of that running sum is the maximum overlap.
+> **📐 Math:** Encoding each interval as a $+1$ event at its start and a $-1$ event at its end converts 'how many intervals overlap at time $t$' into a running sum problem: sorting all $2n$ events and scanning left to right, the running counter at any point equals exactly the number of active intervals there — the peak of that running sum is the maximum overlap.
 
 **Problem:** *Meeting Rooms II* — minimum number of meeting rooms required.
 
@@ -1474,7 +1474,7 @@ return (int)v.size() - cnt; // removals needed
 
 When you need the most recent non-overlapping interval for each interval (e.g. to feed into interval DP), binary search the sorted array of end times instead of scanning linearly. `upper_bound` finds the last interval ending before the current one starts.
 
-> **📐 Math:** Binary searching for the last interval ending before the current start turns an O(n) linear scan per interval into O(log n), so over n intervals total time drops from O(n²) to O(n log n).
+> **📐 Math:** Binary searching for the last interval ending before the current start turns an $O(n)$ linear scan per interval into $O(\log n)$, so over $n$ intervals total time drops from $O(n^2)$ to $O(n \log n)$.
 
 **Problem:** Optimization step for DP-based interval scheduling (e.g. *Job Scheduling* variants).
 
@@ -1493,7 +1493,7 @@ int idx = (int)(it - ends.begin()) - 1; // last compatible interval
 
 For an in-place 90-degree clockwise rotation: first transpose the matrix (swap `m[i][j]` with `m[j][i]` for all `j > i`), then reverse each row. Counter-clockwise rotation reverses the composition order: reverse rows first, then transpose.
 
-> **📐 Math:** A 90° clockwise rotation maps element (i, j) to (j, n-1-i). Transpose alone maps (i,j) → (j,i); following with a horizontal reverse of each row maps (j,i) → (j, n-1-i) — composing those two simpler O(n²) operations reproduces the rotation formula without extra storage.
+> **📐 Math:** A $90°$ clockwise rotation maps element $(i, j)$ to $(j, n-1-i)$. Transpose alone maps $(i,j) \to (j,i)$; following with a horizontal reverse of each row maps $(j,i) \to (j, n-1-i)$ — composing those two simpler $O(n^2)$ operations reproduces the rotation formula without extra storage.
 
 **Problem:** *Rotate Image*.
 
@@ -1512,7 +1512,7 @@ for (auto& row : matrix) reverse(row.begin(), row.end());
 
 An alternative to transpose+reverse: rotate the matrix one concentric ring at a time using a 4-way element swap, without allocating a copy. Outer loop walks layers from the outside in; inner loop performs the 4-way cyclic swap for each position in that layer.
 
-> **📐 Math:** Layer k of an n×n matrix forms a ring with 4(n - 1 - 2k) elements rotated as 4-way swaps — each element cycles through exactly 4 positions in one pass, so the whole matrix (summed over all O(n/2) layers) is rotated in O(n²) time and O(1) extra space.
+> **📐 Math:** Layer $k$ of an $n \times n$ matrix forms a ring with $4(n - 1 - 2k)$ elements rotated as 4-way swaps — each element cycles through exactly 4 positions in one pass, so the whole matrix (summed over all $O(n/2)$ layers) is rotated in $O(n^2)$ time and $O(1)$ extra space.
 
 **Problem:** *Rotate Image*, alternative O(1)-space approach.
 
@@ -1536,7 +1536,7 @@ while (lo < hi) {
 
 Process a matrix from the outermost ring inward by tracking four boundary variables (`top`, `bottom`, `left`, `right`) and shrinking them after each side is processed: top row left→right, right column top→bottom, bottom row right→left (if a row remains), left column bottom→top (if a column remains).
 
-> **📐 Math:** Spiral traversal visits exactly R·C cells once each, since the shrinking boundary box guarantees no cell is revisited and the box's area strictly decreases after each side is processed — termination follows because the box area is a strictly decreasing, bounded-below sequence.
+> **📐 Math:** Spiral traversal visits exactly $R \cdot C$ cells once each, since the shrinking boundary box guarantees no cell is revisited and the box's area strictly decreases after each side is processed — termination follows because the box area is a strictly decreasing, bounded-below sequence.
 
 **Problem:** *Spiral Matrix*.
 
@@ -1591,7 +1591,7 @@ for (int c : colSet) for (int r = 0; r < R; r++) m[r][c] = 0;
 
 When values are bounded to a known range (e.g. `[1, n]`), use the *sign* of existing array entries as a membership flag instead of a separate hash set. Negate `nums[|x|-1]` to record that value `|x|` has been seen; a second pass finds the first still-positive index, whose value+1 was never present.
 
-> **📐 Math:** Marking nums[|x|-1] negative is a clever O(1)-space membership trick: since values are bounded to [1, n], each value maps to a unique valid index, so 'is value v present' becomes 'is index v-1 negative' — turning a presence query into an O(1) sign check instead of a hash set lookup.
+> **📐 Math:** Marking $\text{nums}[|x|-1]$ negative is a clever $O(1)$-space membership trick: since values are bounded to $[1, n]$, each value maps to a unique valid index, so 'is value $v$ present' becomes 'is index $v-1$ negative' — turning a presence query into an $O(1)$ sign check instead of a hash set lookup.
 
 **Problem:** *First Missing Positive*.
 
@@ -1612,7 +1612,7 @@ return n + 1;
 
 An integer is stored as a sequence of bits; bit k (0-indexed from the right) has value 2^k. Negative numbers use two's complement: invert all bits and add 1, so that addition/subtraction circuits work uniformly for positive and negative values. An n-bit signed integer's range is `[-2^(n-1), 2^(n-1) - 1]` — for 32-bit ints, `[-2147483648, 2147483647]`.
 
-> **📐 Math:** The range asymmetry exists because zero takes one of the 2^n possible bit patterns from the positive side. Two's complement makes `x + (-x) = 0` work with ordinary binary addition (with overflow discarded) — that uniformity is why hardware doesn't need separate add/subtract circuits for signed numbers.
+> **📐 Math:** The range asymmetry exists because zero takes one of the $2^n$ possible bit patterns from the positive side. Two's complement makes `x + (-x) = 0` work with ordinary binary addition (with overflow discarded) — that uniformity is why hardware doesn't need separate add/subtract circuits for signed numbers.
 
 ```cpp
 // Print 32-bit binary
@@ -1631,7 +1631,7 @@ int neg = ~x + 1;
 
 `x & y` is 1 only where both inputs are 1 (test a bit, test even/odd). `x | y` is 1 where either is 1 (set a bit). `x ^ y` is 1 where exactly one is 1 (toggle a bit; cancels duplicates). `~x` flips every bit. Shifts: `x << k` multiplies by 2^k; `x >> k` divides by 2^k. Combine a shifted `1` (`1 << k`) as a mask to test, set, clear, or toggle bit k.
 
-> **📐 Math:** Left-shifting by k is equivalent to multiplying by 2^k (each shift doubles the value, k times); right-shifting by k is equivalent to integer division by 2^k. Bit k of x can be tested by (x >> k) & 1: shifting moves that bit to position 0, and ANDing with 1 isolates it.
+> **📐 Math:** Left-shifting by $k$ is equivalent to multiplying by $2^k$ (each shift doubles the value, $k$ times); right-shifting by $k$ is equivalent to integer division by $2^k$. Bit $k$ of $x$ can be tested by $(x \gg k) \land 1$: shifting moves that bit to position 0, and ANDing with 1 isolates it.
 
 ```cpp
 bool odd   = x & 1;            // LSB check
@@ -1652,7 +1652,7 @@ int  mul8  = x << 3;
 
 `x & (x-1)` clears the lowest set bit, because subtracting 1 flips every trailing zero to 1 and the lowest set bit to 0, so ANDing with the original re-zeros exactly that bit. Looping this (Brian Kernighan's algorithm) counts set bits in O(popcount) iterations rather than checking all 32 positions. `x & (-x)` isolates the lowest set bit instead of clearing it. `x > 0 && !(x & (x-1))` tests whether x is a power of two — true exactly when x has only one set bit.
 
-> **📐 Math:** x & (x-1) clears the lowest set bit because subtracting 1 flips every trailing zero to 1 and the lowest set bit to 0; ANDing with the original x re-zeros exactly that bit and leaves everything above it untouched. The Brian Kernighan loop therefore runs exactly popcount(n) times — faster than checking all 32 bit positions when n is sparse.
+> **📐 Math:** $x \land (x-1)$ clears the lowest set bit because subtracting 1 flips every trailing zero to 1 and the lowest set bit to 0; ANDing with the original $x$ re-zeros exactly that bit and leaves everything above it untouched. The Brian Kernighan loop therefore runs exactly $\text{popcount}(n)$ times — faster than checking all 32 bit positions when $n$ is sparse.
 
 **Problem:** *Number of 1 Bits* and *Power of Two*.
 
@@ -1671,7 +1671,7 @@ int  lsb    = x & (-x);          // isolate lowest set bit
 
 To count set bits for every integer from 0 to n efficiently, use `dp[i] = dp[i >> 1] + (i & 1)`: right-shifting `i` by 1 drops its lowest bit, and `(i & 1)` is exactly that dropped bit, so popcount(i) equals popcount(i without its last bit) plus that last bit. This fills all n+1 answers in O(n) total instead of computing each one independently with `__builtin_popcount`.
 
-> **📐 Math:** dp[i] = dp[i >> 1] + (i & 1) works because right-shifting i by 1 drops its lowest bit, and (i & 1) is exactly that dropped bit — so the popcount of i equals the popcount of i without its last bit, plus that last bit. This recurrence fills all n+1 answers in O(n) total instead of O(n log n) from counting bits independently for each number.
+> **📐 Math:** $\text{dp}[i] = \text{dp}[i \gg 1] + (i \land 1)$ works because right-shifting $i$ by 1 drops its lowest bit, and $(i \land 1)$ is exactly that dropped bit — so the popcount of $i$ equals the popcount of $i$ without its last bit, plus that last bit. This recurrence fills all $n+1$ answers in $O(n)$ total instead of $O(n \log n)$ from counting bits independently for each number.
 
 **Problem:** *Counting Bits*.
 
@@ -1687,7 +1687,7 @@ return dp;
 
 XOR forms a group under `a ⊕ a = 0` and `a ⊕ 0 = a`, and is associative/commutative — so XORing a whole array cancels every value that appears in pairs, leaving only the unpaired one, regardless of order. The same identity finds a *missing* number: XOR all values `0..n` together with all array elements; every present number cancels with its index, leaving the missing one.
 
-> **📐 Math:** XOR forms a group under the identities a ⊕ a = 0 and a ⊕ 0 = a. XORing the whole array is associative and commutative, so all paired (duplicate) values cancel to 0 regardless of order, leaving only the unpaired value — no extra space or sorting needed.
+> **📐 Math:** XOR forms a group under the identities $a \oplus a = 0$ and $a \oplus 0 = a$. XORing the whole array is associative and commutative, so all paired (duplicate) values cancel to 0 regardless of order, leaving only the unpaired value — no extra space or sorting needed.
 
 **Problem:** *Single Number* and *Missing Number*.
 
@@ -1707,7 +1707,7 @@ for (int i = 0; i < n; i++) missing ^= i ^ nums[i];
 
 The sum of integers 0 to n is `n(n+1)/2` (Gauss's formula). Subtracting the actual array sum from this expected sum gives an O(n) alternative to XOR for finding a single missing value — useful context, though it can overflow for large n where XOR doesn't.
 
-> **📐 Math:** Gauss's identity 0+1+...+n = n(n+1)/2 comes from pairing the first and last terms (0+n), second and second-to-last (1+(n-1)), etc. — each of the n/2 pairs sums to n, giving n·n/2 = n(n+1)/2 total. This makes "expected sum minus actual sum" an O(n) way to find one missing value, as a complement to the XOR approach above.
+> **📐 Math:** Gauss's identity $0 + 1 + \ldots + n = n(n+1)/2$ comes from pairing the first and last terms $(0+n)$, second and second-to-last $(1+(n-1))$, etc. — each of the $n/2$ pairs sums to $n$, giving $n \cdot n/2 = n(n+1)/2$ total. This makes "expected sum minus actual sum" an $O(n)$ way to find one missing value, as a complement to the XOR approach above.
 
 **Pattern:** alternative technique for *Missing Number*, shown alongside the XOR approach above for comparison.
 
@@ -1772,7 +1772,7 @@ bool dfs(vector<vector<char>>& board, string& word, int r, int c, int i) {
 
 To find the median of a growing stream of numbers, split the data across two heaps: a max-heap for the lower half, a min-heap for the upper half, kept balanced to within size 1 of each other. Each insertion pushes into one heap then rebalances by moving the top element across if needed — O(log n) per insertion. The median is then always available at a heap top: the top of the larger heap (odd total count), or the average of both tops (even total count). This is the general pattern for streaming-data designs: maintain an invariant on every insert so queries stay O(1) or O(log n), rather than recomputing from scratch each time.
 
-> **📐 Math:** Keeping the two heaps balanced to within size 1 of each other guarantees the median is always at a heap top: with n total elements, if n is even the median is the average of both tops (the two 'middle' elements), and if n is odd it's the top of the larger heap (the single true middle element) — each insertion costs O(log n) to maintain this invariant.
+> **📐 Math:** Keeping the two heaps balanced to within size 1 of each other guarantees the median is always at a heap top: with $n$ total elements, if $n$ is even the median is the average of both tops (the two 'middle' elements), and if $n$ is odd it's the top of the larger heap (the single true middle element) — each insertion costs $O(\log n)$ to maintain this invariant.
 
 **Problem:** *Find Median from Data Stream*.
 

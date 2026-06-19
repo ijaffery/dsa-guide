@@ -293,6 +293,25 @@ pre code {
   font-size: inherit; border: none;
 }
 
+/* ─── Callout / Blockquote Boxes ─── */
+blockquote {
+  border-left: 3px solid var(--accent);
+  background: linear-gradient(135deg, rgba(137,180,250,.06), rgba(203,166,247,.04));
+  padding: .85rem 1.25rem;
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  margin: 1.25rem 0;
+  font-size: .92rem;
+  color: var(--fg-muted);
+  line-height: 1.7;
+}
+blockquote p {
+  margin: 0;
+}
+blockquote strong {
+  color: var(--accent);
+}
+
+/* ─── Info / Tip Boxes ─── */
 /* ─── Info / Tip Boxes ─── */
 .callout {
   border-left: 3px solid var(--accent);

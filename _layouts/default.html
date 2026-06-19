@@ -11,6 +11,21 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=JetBrains+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet">
   <link rel="stylesheet" href="{{ "/assets/css/style.css" | relative_url }}">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='.9'>⚡</text></svg>">
+
+  <!-- MathJax for inline math rendering -->
+  <script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      displayMath: [['$$', '$$'], ['\\[', '\\]']],
+      processEscapes: true
+    },
+    options: {
+      skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+  };
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
 </head>
 <body>
   <a href="#main" class="skip-link">Skip to content</a>
@@ -22,15 +37,15 @@
     <div class="container">
       <a class="site-title" href="{{ "/" | relative_url }}">⚡ C++ DSA Guide</a>
       <nav class="site-nav">
-        <a href="#arrays--hasing" class="nav-link">Arrays</a>
-        <a href="#two-pointers" class="nav-link">2 Pointers</a>
-        <a href="#stack" class="nav-link">Stack</a>
+        <a href="#arrays--hashing" class="nav-link">Arrays</a>
+        <a href="#two-pointers--sliding-window" class="nav-link">2 Pt</a>
+        <a href="#stack--queue" class="nav-link">Stack</a>
         <a href="#binary-search" class="nav-link">Binary</a>
         <a href="#linked-lists" class="nav-link">Lists</a>
-        <a href="#trees" class="nav-link">Trees</a>
+        <a href="#trees--tries" class="nav-link">Trees</a>
         <a href="#graphs" class="nav-link">Graphs</a>
         <a href="#dynamic-programming" class="nav-link">DP</a>
-        <a href="#intervals" class="nav-link">Greedy</a>
+        <a href="#intervals--greedy" class="nav-link">Greedy</a>
         <a href="#matrices" class="nav-link">Matrices</a>
         <a href="#bit-manipulation" class="nav-link">Bits</a>
       </nav>
