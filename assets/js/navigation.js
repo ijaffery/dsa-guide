@@ -46,6 +46,7 @@ document.querySelectorAll('h3').forEach(h3 => {
   const match = text.match(/^(\d+)\./);
   if (match) {
     h3.setAttribute('data-num', match[1]);
+    h3.textContent = text.replace(/^(\d+)\./, '');
   }
 });
 
