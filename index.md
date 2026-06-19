@@ -448,8 +448,7 @@ int front = q.front(); q.pop(); // FIFO: front = 1
 ---
 
 
-## Binary Search
-
+<a id="binary-search"></a>
 ### 23. Binary Search
 
 Repeatedly halve the search space by comparing the middle element to the target. Requires a sorted (or monotone) input. Always compute `mid = left + (right - left) / 2` to avoid integer overflow. Time O(log n).
