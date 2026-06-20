@@ -78,7 +78,7 @@ a:hover { color: var(--accent2); text-decoration: underline; }
 
 /* ─── Header ─── */
 .site-header {
-  position: fixed; top: 0; left: 0; right: 0; z-index: 50;
+  position: fixed; top: 0; left: 0; right: 0; width: 100vw;
   background: rgba(10,10,15,.8);
   backdrop-filter: blur(16px) saturate(1.5);
   border-bottom: 1px solid var(--border);
@@ -113,6 +113,13 @@ a:hover { color: var(--accent2); text-decoration: underline; }
 .menu-toggle {
   display: flex; flex-direction: column; gap: 4px; background: none;
   border: none; cursor: pointer; padding: 6px;
+  -webkit-tap-highlight-color: transparent;
+  outline: none;
+  flex-shrink: 0;
+  min-width: 44px;
+  min-height: 44px;
+  align-items: center;
+  justify-content: center;
 }
 .menu-toggle span {
   display: block; width: 18px; height: 2px; background: var(--fg-muted);
@@ -123,55 +130,13 @@ a:hover { color: var(--accent2); text-decoration: underline; }
 @media (max-width: 899px) {
   .site-nav {
     display: none; flex-direction: column;
-    position: fixed; top: 52px; left: 0; right: 0; z-index: 60;
+    position: fixed; top: 52px; left: 0; right: 0; z-index: 9999;
     overflow: visible;
-    background: rgba(10,10,15,.95); backdrop-filter: blur(16px);
+    background: rgba(10,10,15,.98);
     padding: 1rem; gap: .25rem; border-bottom: 1px solid var(--border);
   }
   .site-nav.open { display: flex; }
   .nav-link { padding: .75rem 1rem; font-size: .9rem; }
-}
-
-/* ─── Hero Section ─── */
-.hero {
-  padding: 8rem 0 3rem;
-  text-align: center;
-  position: relative;
-  overflow: hidden;
-}
-.hero::before {
-  content: '';
-  position: absolute; top: -200px; left: 50%; transform: translateX(-50%);
-  width: 800px; height: 800px;
-  background: radial-gradient(ellipse, rgba(137,180,250,.06) 0%, rgba(203,166,247,.04) 40%, transparent 70%);
-  pointer-events: none;
-}
-.hero h1 {
-  font-size: clamp(2.5rem, 6vw, 4rem);
-  font-weight: 800; letter-spacing: -.03em;
-  line-height: 1.1; margin-bottom: 1rem;
-  background: linear-gradient(135deg, #ffffff 0%, var(--accent) 50%, var(--accent2) 100%);
-  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-.hero .subtitle {
-  font-size: 1.1rem; color: var(--fg-muted); margin-bottom: .75rem;
-}
-.hero .meta {
-  display: inline-flex; align-items: center; gap: .5rem;
-  background: var(--bg-surface); border: 1px solid var(--border);
-  padding: .4rem 1rem; border-radius: 100px; font-size: .85rem;
-  color: var(--fg-muted);
-}
-.hero .meta .dot {
-  width: 6px; height: 6px; border-radius: 50%;
-  background: var(--accent3);
-  box-shadow: 0 0 8px var(--accent3);
-  animation: pulse 2s infinite;
-}
-@keyframes pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: .4; }
 }
 
 /* ─── Category Section Headers ─── */
@@ -200,32 +165,6 @@ h2:nth-of-type(9)::before { background: var(--accent9); }
 h2:nth-of-type(10)::before { background: var(--accent10); }
 h2:nth-of-type(11)::before { background: var(--accent11); }
 
-/* ─── Topic Cards ─── */
-.topic {
-  background: var(--bg-surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 1.5rem;
-  margin-bottom: 1.5rem;
-  transition: all .3s ease;
-  position: relative;
-  overflow: hidden;
-}
-.topic::before {
-  content: '';
-  position: absolute; top: 0; left: 0; right: 0;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, var(--accent), transparent);
-  opacity: 0;
-  transition: opacity .3s;
-}
-.topic:hover {
-  border-color: rgba(137,180,250,.3);
-  box-shadow: 0 0 30px rgba(137,180,250,.05);
-  transform: translateY(-1px);
-}
-.topic:hover::before { opacity: 1; }
-
 /* ─── Section Dividers ─── */
 hr { border: none; height: 1px; background: var(--border); margin: 3rem 0; }
 
@@ -239,20 +178,6 @@ h3 {
   margin: 1.25rem 0 .5rem;
   display: flex; align-items: center; gap: .5rem;
   color: var(--fg);
-}
-
-/* Topic number badge */
-h3::before {
-  content: attr(data-num);
-  display: inline-flex; align-items: center; justify-content: center;
-  min-width: 24px; height: 24px;
-  background: var(--bg-elevated);
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  font-size: .7rem; font-weight: 600;
-  font-family: var(--font-mono);
-  color: var(--accent);
-  padding: 0 6px;
 }
 
 /* ─── Code Blocks ─── */
@@ -294,51 +219,7 @@ pre code {
   font-size: inherit; border: none;
 }
 
-/* ─── Code Tabs ─── */
-.code-tabs {
-  margin: 1rem 0 1.25rem;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  overflow: hidden;
-}
-.code-tabs-bar {
-  display: flex;
-  background: var(--bg-elevated);
-  border-bottom: 1px solid var(--border);
-  gap: 2px;
-  padding: 4px 4px 0;
-}
-.code-tab {
-  padding: .5rem 1.25rem;
-  border: 1px solid transparent;
-  border-bottom: none;
-  border-radius: 6px 6px 0 0;
-  background: transparent;
-  color: var(--fg-muted);
-  font-family: var(--font-sans);
-  font-size: .82rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all .2s;
-}
-.code-tab:hover { color: var(--fg); }
-.code-tab.active {
-  background: var(--bg-code);
-  color: var(--accent);
-  border-color: var(--border);
-}
-.code-pane {
-  display: none;
-}
-.code-pane.active {
-  display: block;
-}
-.code-pane pre {
-  margin: 0;
-  border: none;
-  border-radius: 0;
-}
-/* ─── Callout / Blockquote Boxes ─── */
+/* ─── Blockquote Boxes ─── */
 blockquote {
   border-left: 3px solid var(--accent);
   background: linear-gradient(135deg, rgba(137,180,250,.06), rgba(203,166,247,.04));
@@ -356,48 +237,18 @@ blockquote strong {
   color: var(--accent);
 }
 
-/* ─── Info / Tip Boxes ─── */
-/* ─── Info / Tip Boxes ─── */
-.callout {
-  border-left: 3px solid var(--accent);
-  background: rgba(137,180,250,.05);
-  padding: .75rem 1rem;
-  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
-  margin: 1rem 0;
-  font-size: .9rem;
-  color: var(--fg-muted);
-}
-.callout strong { color: var(--accent); }
-
 /* ─── Table of Contents ─── */
-.toc {
-  background: var(--bg-surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 1.5rem;
-  margin-bottom: 3rem;
+#table-of-contents + ul {
+  list-style: disc; padding-left: 1.5rem;
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: .5rem;
 }
-.toc summary {
-  cursor: pointer; font-weight: 700; font-size: 1rem;
-  color: var(--fg);
-  list-style: none;
-  display: flex; align-items: center; gap: .5rem;
-}
-.toc summary::-webkit-details-marker { display: none; }
-.toc summary::before {
-  content: '▸';
-  transition: transform .2s;
-  color: var(--fg-muted);
-}
-.toc[open] summary::before { transform: rotate(90deg); }
-.toc ul { list-style: none; padding: .75rem 0 0 1rem; display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: .25rem .75rem; }
-.toc li { margin: 0; }
-.toc a {
-  font-size: .88rem; color: var(--fg-muted);
+#table-of-contents + ul li { margin: 0; }
+#table-of-contents + ul a {
+  font-size: .88rem; color: var(--fg);
   padding: .3rem .5rem; border-radius: 4px;
   display: block; transition: all .2s;
 }
-.toc a:hover {
+#table-of-contents + ul a:hover {
   color: var(--accent); background: rgba(137,180,250,.06);
   text-decoration: none;
 }
@@ -411,22 +262,11 @@ blockquote strong {
   text-align: center;
 }
 
-/* ─── Animations ─── */
-@keyframes fadeInUp {
-  from { opacity: 0; transform: translateY(20px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-.topic { animation: fadeInUp .5s ease both; }
-.topic:nth-child(1) { animation-delay: .05s; }
-.topic:nth-child(2) { animation-delay: .1s; }
-.topic:nth-child(3) { animation-delay: .15s; }
-
 /* ─── Print ─── */
 @media print {
   .site-header, .site-footer, .skip-link, .menu-toggle { display: none; }
   body { font-size: 11pt; }
   a { color: #000; }
-  .topic { break-inside: avoid; border: 1px solid #ccc; }
 }
 
 /* ─── Viewport constraint (prevents horizontal scroll on mobile) ─── */
@@ -441,31 +281,26 @@ html {
     padding-top: 52px;
   }
   .container {
-    padding: 0 1rem;
+    padding: 0 .75rem;
     width: 100%;
   }
   .site-header .container {
-    padding: .5rem 1rem;
+    padding: .5rem .75rem;
   }
-  .hero {
-    padding: 5rem 0 2rem;
-  }
-  .hero h1 {
-    font-size: 1.75rem;
+  .site-title {
+    font-size: .95rem;
   }
   h2 {
     font-size: 1.35rem;
     margin: 2.5rem 0 1rem;
   }
-  .topic {
-    padding: 1rem;
-  }
   pre {
     padding: .75rem 1rem;
     font-size: .75rem;
   }
-  .toc ul {
+  #table-of-contents + ul {
     grid-template-columns: 1fr;
+    padding-left: 1.25rem;
   }
 }
 
