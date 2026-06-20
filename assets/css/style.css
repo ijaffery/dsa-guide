@@ -123,7 +123,8 @@ a:hover { color: var(--accent2); text-decoration: underline; }
 @media (max-width: 899px) {
   .site-nav {
     display: none; flex-direction: column;
-    position: fixed; top: 52px; left: 0; right: 0;
+    position: fixed; top: 52px; left: 0; right: 0; z-index: 60;
+    overflow: visible;
     background: rgba(10,10,15,.95); backdrop-filter: blur(16px);
     padding: 1rem; gap: .25rem; border-bottom: 1px solid var(--border);
   }
