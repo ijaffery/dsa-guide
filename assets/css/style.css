@@ -428,7 +428,16 @@ blockquote strong {
   .topic { break-inside: avoid; border: 1px solid #ccc; }
 }
 
-/* ─── Large screens ─── */
+/* ─── Prevent horizontal overflow on mobile ─── */
+* {
+  overflow-x: hidden;
+}
+html, body {
+  overflow-x: hidden;
+  max-width: 100vw;
+}
+
+/* ─── Mobile tweaks ─── */
 @media (min-width: 1200px) {
   .container { padding: 0 3rem; }
 }
