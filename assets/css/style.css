@@ -293,6 +293,50 @@ pre code {
   font-size: inherit; border: none;
 }
 
+/* ─── Code Tabs ─── */
+.code-tabs {
+  margin: 1rem 0 1.25rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+.code-tabs-bar {
+  display: flex;
+  background: var(--bg-elevated);
+  border-bottom: 1px solid var(--border);
+  gap: 2px;
+  padding: 4px 4px 0;
+}
+.code-tab {
+  padding: .5rem 1.25rem;
+  border: 1px solid transparent;
+  border-bottom: none;
+  border-radius: 6px 6px 0 0;
+  background: transparent;
+  color: var(--fg-muted);
+  font-family: var(--font-sans);
+  font-size: .82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all .2s;
+}
+.code-tab:hover { color: var(--fg); }
+.code-tab.active {
+  background: var(--bg-code);
+  color: var(--accent);
+  border-color: var(--border);
+}
+.code-pane {
+  display: none;
+}
+.code-pane.active {
+  display: block;
+}
+.code-pane pre {
+  margin: 0;
+  border: none;
+  border-radius: 0;
+}
 /* ─── Callout / Blockquote Boxes ─── */
 blockquote {
   border-left: 3px solid var(--accent);

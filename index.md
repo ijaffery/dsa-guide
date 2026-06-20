@@ -1,13 +1,13 @@
 ---
 layout: default
-title: C++ DSA Concepts Guide
+title: DSA Concepts Guide
 ---
 
-# C++ DSA Concepts Guide
+# DSA Concepts Guide
 
 **Pseudocode & Notes for Every Topic**
 
-~100 concepts across 11 categories · C++17 syntax
+~100 concepts across 11 categories · C++, Python & more
 
 Each code block is tagged with the specific problem it solves, so you can see the pattern in context.
 
@@ -36,7 +36,7 @@ Each code block is tagged with the specific problem it solves, so you can see th
 
 ### 1. Arrays & Traversal
 
-Contiguous memory with O(1) random access by index. A single pass tracks both the value and its index — the building block used in almost every array algorithm. For small bounded alphabets (e.g. a–z) a plain `int freq[26]` is faster and simpler than a hash map. `std::vector` is the dynamic, resizable version.
+Contiguous memory with O(1) random access by index. A single pass tracks both the value and its index — the building block used in almost every array algorithm. For small bounded alphabets (e.g. a–z) a plain `int freq[26]` is faster and simpler than a hash map. `std::vector` is the dynamic, resizable version in C++; in Python, lists serve the same purpose.
 
 **Problem:** General-purpose pattern used across most array problems (e.g. *Contains Duplicate*, *Two Sum*).
 
@@ -49,11 +49,19 @@ int freq[26] = {};                    // fast fixed alphabet
 for (char c : s) freq[c - 'a']++;
 ```
 
+```python
+v = [1, 2, 3]                        # dynamic array (list)
+for i, val in enumerate(v):          # value and index together
+    pass
+freq = [0] * 26                      # fast fixed alphabet
+for c in s: freq[ord(c) - ord('a')] += 1
+```
+
 ---
 
 ### 2. Hash Sets
 
-An unordered collection of unique elements with O(1) average insert, delete, and lookup. Use it to answer "have I seen this before?" in constant time. Backed by a hash table; worst case O(n) due to collisions but rare in practice.
+An unordered collection of unique elements with O(1) average insert, delete, and lookup. In C++, use `unordered_set` — in Python, use `set()`. Use it to answer "have I seen this before?" in constant time. Backed by a hash table; worst case O(n) due to collisions but rare in practice.
 
 > **📐 Math:** Expected collisions for $n$ items into a table of size $m$ (load factor $\alpha = n/m$) follow the birthday-problem approximation: $P(\text{collision}) \approx 1 - e^{-n^2/2m}$. This is why hash tables resize (double $m$) once $\alpha$ exceeds ~0.7 — it keeps expected probe length near $O(1)$.
 
@@ -67,12 +75,19 @@ for (int x : nums) {
 }
 return false;
 ```
+```python
+seen = set()
+for x in nums:
+    if x in seen: return True  # duplicate found
+    seen.add(x)
+return False
+```
 
 ---
 
 ### 3. Hash Maps
 
-A key-to-value store with O(1) average insert and lookup. Essential for frequency counting, index caching, and grouping items by a common key. Use `unordered_map` for O(1) average or `map` for O(log n) with sorted keys.
+A key-to-value store with O(1) average insert and lookup. In C++, use `unordered_map` for O(1) or `map` for O(log n) sorted keys. In Python, use `dict()` for O(1) or `sorted()` on keys for sorted order. Essential for frequency counting, index caching, and grouping items by a common key.
 
 **Problem:** *Two Sum* — find indices `i, j` such that `nums[i] + nums[j] == target`, using one pass and a value→index map.
 
@@ -84,12 +99,19 @@ for (int i = 0; i < (int)nums.size(); i++) {
     seen[nums[i]] = i;
 }
 ```
+```python
+seen = {}  # value -> index
+for i, num in enumerate(nums):
+    need = target - num
+    if need in seen: return [seen[need], i]
+    seen[num] = i
+```
 
 ---
 
 ### 4. Hash Map as Grouping Key
 
-When items share a common property, use that property as the map key and accumulate matching items into a list. Sorting a string's characters into a canonical form is the classic way to turn "is this an anagram of that" into "do these have the same key."
+When items share a common property, use that property as the map key and accumulate matching items into a list. In C++, sort a string copy with `std::sort` to create the canonical key and use `unordered_map<string, vector<string>>`. In Python, `''.join(sorted(w))` does the same, and `collections.defaultdict(list)` handles the grouping automatically.
 
 **Problem:** *Group Anagrams* — group words that are anagrams of each other.
 
@@ -101,12 +123,19 @@ for (string& w : words) {
     groups[key].push_back(w);
 }
 ```
+```python
+from collections import defaultdict
+groups = defaultdict(list)
+for w in words:
+    key = ''.join(sorted(w))  # "eat" -> "aet"
+    groups[key].append(w)
+```
 
 ---
 
 ### 5. Character Frequency Counting
 
-Count how often each character appears. For ASCII lowercase letters a fixed `int[26]` array is faster than a hash map — index with `c - 'a'`. Two strings are anagrams iff their frequency arrays match exactly.
+Count how often each character appears. For ASCII lowercase letters a fixed `int[26]` array is fastest in C++ — index with `c - 'a'`. In Python, `collections.Counter` does this in one call, or a list of 26 zeros gives the same performance. Two strings are anagrams iff their frequency arrays (or Counters) match exactly.
 
 **Problem:** *Valid Anagram* — check whether `s` and `t` are anagrams of each other.
 
@@ -117,6 +146,14 @@ for (char c : t) freq[c - 'a']--;
 for (int f : freq) if (f != 0) return false;
 return s.size() == t.size();
 ```
+```python
+from collections import Counter
+freq_s = Counter(s)
+freq_t = Counter(t)
+return freq_s == freq_t
+```
+
+
 
 ---
 
@@ -134,6 +171,13 @@ sort(v.begin(), v.end(), [](int a, int b){
     return a > b;                     // descending
 });
 ```
+```python
+v.sort()                    # ascending O(n log n)
+v.sort(reverse=True)        # descending
+# Custom key: v.sort(key=lambda x: -x)
+```
+
+
 
 ---
 
@@ -152,12 +196,21 @@ for (int i = 0; i < n; i++)
         if (nums[i] == nums[j]) return true;
 return false;
 ```
+```python
+# O(n^2) brute force -- compare all pairs
+for i in range(n):
+    for j in range(i + 1, n):
+        if nums[i] == nums[j]: return True
+return False
+```
+
+
 
 ---
 
 ### 8. String Manipulation
 
-Building, slicing, and transforming strings: iterating character-by-character, extracting substrings with `substr`, reversing with `std::reverse`, filtering, and changing case with `toupper` / `tolower`.
+Building, slicing, and transforming strings: iterating character-by-character, extracting substrings with `substr` (C++) or slicing `s[start:end]` (Python), reversing with `std::reverse` / `reversed()`, filtering, and changing case with `tolower/toupper` or `.lower()/.upper()`.
 
 **Problem:** *Valid Palindrome* — strip non-alphanumeric characters, lowercase everything, then compare to its reverse.
 
@@ -168,12 +221,19 @@ for (char c : s)
 reverse(res.begin(), res.end());
 string sub = s.substr(start, len);
 ```
+```python
+res = [c.lower() for c in s if c.isalnum()]
+res.reverse()
+sub = s[start:start+len]  # slicing
+```
+
+> **💡 Python Tip:** Python strings are immutable — list comprehensions with `''.join()` are more efficient than repeated concatenation. Use `c.isalnum()` and `c.lower()` for built-in character classification.
 
 ---
 
 ### 9. Heap / Priority Queue
 
-A binary heap giving O(1) access to the min (min-heap) or max (max-heap) element, with O(log n) push/pop. Use `priority_queue` for top-k problems, scheduling, and greedy algorithms that always need the smallest/largest element next.
+A binary heap giving O(1) access to the min (min-heap) or max (max-heap) element, with O(log n) push/pop. In C++, use `priority_queue<int, vector<int>, greater<int>>` for min-heap and `priority_queue<int>` for max-heap. In Python, use `heapq` (min-heap by default; negate values for max-heap behavior). Use for top-k problems, scheduling, and greedy algorithms that always need the smallest/largest element next.
 
 **Problem:** *Kth Largest Element in an Array* — push, pop, peek with a min-heap and max-heap.
 
@@ -183,12 +243,25 @@ priority_queue<int> maxH;           // default max-heap
 minH.push(x);
 int top = minH.top(); minH.pop();
 ```
+```python
+import heapq
+minH = []
+heapq.heappush(minH, x)
+top = heapq.heappop(minH)
+
+# Max-heap: negate values
+maxH = []
+heapq.heappush(maxH, -x)
+top = -heapq.heappop(maxH)
+```
+
+
 
 ---
 
 ### 10. Bucket Sort
 
-Instead of comparing elements, place each value into a bucket whose index equals the value. Reading buckets in order produces a sorted result in O(n). Ideal when the value range is bounded, e.g. frequencies 1 to n.
+Instead of comparing elements, place each value into a bucket whose index equals the value. Reading buckets in order produces a sorted result in O(n). Ideal when the value range is bounded, e.g. frequencies 1 to n. In C++, use `vector<vector<int>>` for buckets; in Python, use a list of lists ` [[] for _ in range(n+1)]`.
 
 > **📐 Math:** Bucket sort is $O(n)$ only because the value range is bounded by $n$: with $n$ buckets holding $n$ total elements, total work across all buckets is $O(n)$ even though each bucket might be scanned individually. This breaks down to $O(n \log n)$ (comparison-sort territory) once bucket sizes aren't bounded by a constant.
 
@@ -202,12 +275,29 @@ vector<int> res;
 for (int i = n; i >= 0 && (int)res.size() < k; i--)
     for (int v : bucket[i]) res.push_back(v);
 ```
+```python
+from collections import Counter
+
+counts = Counter(nums)
+buckets = [[] for _ in range(len(nums) + 1)]
+for val, cnt in counts.items():
+    buckets[cnt].append(val)
+
+res = []
+for i in range(len(nums), 0, -1):
+    for v in buckets[i]:
+        res.append(v)
+        if len(res) == k:
+            return res
+```
+
+> **💡 Python Tip:** `collections.Counter.most_common(k)` does this exact pattern in one call — `Counter(nums).most_common(k)`.
 
 ---
 
 ### 11. Length-Prefix Encoding
 
-When encoding a list of strings into one string, choose a separator that cannot appear in the data — or sidestep the problem entirely with length-prefixing: encode each string as its length, a separator, then the content (`3#eat4#love`). Decoding reads the length, jumps exactly that many characters, and repeats. No delimiter collision is possible.
+When encoding a list of strings into one string, choose a separator that cannot appear in the data — or sidestep the problem entirely with length-prefixing: encode each string as its length, a separator, then the content (`3#eat4#love`). Decoding reads the length, jumps exactly that many characters, and repeats. No delimiter collision is possible. In C++, use `to_string()` and string concatenation; in Python, use `str()` and `str.join()`.
 
 **Problem:** *Encode and Decode Strings* — serialize a list of strings into one string and back, even if the strings contain arbitrary characters.
 
@@ -220,12 +310,26 @@ string encode(vector<string>& strs) {
 }
 // Decode: parse length, skip '#', read that many chars
 ```
+```python
+def encode(strs):
+    return ''.join(str(len(s)) + '#' + s for s in strs)
+
+def decode(s):
+    res, i = [], 0
+    while i < len(s):
+        j = s.find('#', i)
+        length = int(s[i:j])
+        i = j + 1 + length
+        res.append(s[j + 1:i])
+        i = i
+    return res
+```
 
 ---
 
 ### 12. Prefix / Suffix Sum or Product
 
-Precompute cumulative sums or products so any subarray query is O(1). For products-excluding-self, make two passes: left-to-right accumulating the left product, then right-to-left accumulating the right product. The same two-pass shape works for prefix sums.
+Precompute cumulative sums or products so any subarray query is O(1). For products-excluding-self, make two passes: left-to-right accumulating the left product, then right-to-left accumulating the right product. The same two-pass shape works for prefix sums. In C++, use `vector<int>` and index loops; in Python, use list comprehensions with enumerate or simple `range()` loops.
 
 > **📐 Math:** If $P[i] = \text{nums}[0] \cdot \text{nums}[1] \cdot \ldots \cdot \text{nums}[i-1]$ (left product) and $S[i] = \text{nums}[i+1] \cdot \ldots \cdot \text{nums}[n-1]$ (right product), then $\text{answer}[i] = P[i] \cdot S[i]$ — the product of everything except $\text{nums}[i]$. Computing $P$ and $S$ each take one $O(n)$ pass, and they can be folded into a single output array to get $O(1)$ extra space.
 
@@ -239,12 +343,24 @@ for (int i = 0; i < n; i++)     { out[i] = L; L *= nums[i]; }
 int R = 1;
 for (int i = n - 1; i >= 0; i--){ out[i] *= R; R *= nums[i]; }
 ```
+```python
+n = len(nums)
+out = [1] * n
+L = 1
+for i in range(n):
+    out[i] = L
+    L *= nums[i]
+R = 1
+for i in range(n - 1, -1, -1):
+    out[i] *= R
+    R *= nums[i]
+```
 
 ---
 
 ### 13. Character Classification
 
-Determine whether a character is alphanumeric, alphabetic, a digit, etc. using `isalpha`, `isdigit`, `isalnum`. Essential for palindrome checks and string parsing.
+Determine whether a character is alphanumeric, alphabetic, a digit, etc. using `isalnum`, `isdigit`, `isalpha` in C++ or string methods `.isalnum()`, `.isdigit()`, `.isalpha()` in Python. Essential for palindrome checks and string parsing.
 
 **Problem:** *Valid Palindrome* (classification step) — skip characters that aren't letters or digits before comparing.
 
@@ -254,12 +370,17 @@ for (char c : s) {
     result += tolower(c);
 }
 ```
+```python
+result = ''.join(c.lower() for c in s if c.isalnum())
+```
+
+> **💡 Python Tip:** String methods `.isalnum()`, `.isalpha()`, `.isdigit()`, `.lower()`, `.upper()` are all built-in — no need for `<cctype>` headers.
 
 ---
 
 ### 14. Handling Duplicates (Sorted Array)
 
-After sorting, identical values are adjacent. Skip them with `if (i > 0 && nums[i] == nums[i-1]) continue` to avoid producing duplicate results in two-sum / three-sum problems.
+After sorting, identical values are adjacent. Skip them with `if (i > 0 && nums[i] == nums[i-1]) continue` in C++ or `if i > 0 and nums[i] == nums[i - 1]: continue` in Python, to avoid producing duplicate results in two-sum / three-sum problems.
 
 **Problem:** *3Sum* (dedup step) — after sorting, skip repeated values for `i` so the same triplet isn't reported twice.
 
@@ -270,12 +391,19 @@ for (int i = 0; i < (int)nums.size(); i++) {
     // process nums[i] -- guaranteed first occurrence
 }
 ```
+```python
+nums.sort()
+for i in range(len(nums)):
+    if i > 0 and nums[i] == nums[i - 1]:
+        continue
+    # process nums[i] -- guaranteed first occurrence
+```
 
 ---
 
 ### 15. Hash Map for Skip-Ahead Window
 
-Store each character's most-recently-seen index. When a duplicate is encountered, the left pointer jumps directly past the earlier occurrence rather than inching forward one step at a time — an O(n) refinement over the naive shrink-one-at-a-time sliding window.
+Store each character's most-recently-seen index in a hash map (C++ `unordered_map<char,int>` or Python `dict()`). When a duplicate is encountered, the left pointer jumps directly past the earlier occurrence rather than inching forward one step at a time — an O(n) refinement over the naive shrink-one-at-a-time sliding window.
 
 **Problem:** *Longest Substring Without Repeating Characters*, optimized version — jump `lo` straight past the duplicate instead of incrementing it in a loop.
 
@@ -287,12 +415,20 @@ for (int hi = 0; hi < (int)s.size(); hi++) {
     last[s[hi]] = hi;
 }
 ```
+```python
+last = {}
+lo = 0
+for hi, c in enumerate(s):
+    if c in last:
+        lo = max(lo, last[c] + 1)
+    last[c] = hi
+```
 
 ---
 
 ### 16. Hash Set for Sequence Detection
 
-A hash set isn't just for membership tests — checking `!seen.count(x - 1)` finds the *start* of a run, so you only walk forward from true sequence starts instead of re-walking every element.
+A hash set isn't just for membership tests — checking `!seen.count(x - 1)` (C++) or `x - 1 not in seen` (Python) finds the *start* of a run, so you only walk forward from true sequence starts instead of re-walking every element.
 
 **Problem:** *Longest Consecutive Sequence* — find the length of the longest run of consecutive integers in O(n), without sorting.
 
@@ -302,6 +438,16 @@ for (int x : nums)
     if (!seen.count(x - 1)) // x is a sequence start
         while (seen.count(x)) x++;
 ```
+```python
+seen = set(nums)
+max_len = 0
+for x in nums:
+    if x - 1 not in seen:  # x is a sequence start
+        length = 1
+        while x + length in seen:
+            length += 1
+        max_len = max(max_len, length)
+```
 
 ---
 
@@ -310,7 +456,7 @@ for (int x : nums)
 
 ### 17. Two Pointers
 
-Maintain two indices that move through the array — usually from each end, or both from the left at different speeds. Eliminates the inner loop of a brute-force O(n²) solution, reducing it to O(n). When the array isn't already sorted, sort first and the technique still applies: advance the left pointer when the sum is too small, retreat the right pointer when too large.
+Maintain two indices that move through the array — usually from each end (`lo`, `hi`) or both from the left at different speeds. In C++, use `int lo = 0, hi = (int)nums.size() - 1;` with a while loop; in Python, use `lo, hi = 0, len(nums) - 1` with `while lo < hi:`. Eliminates the inner loop of a brute-force O(n²) solution, reducing it to O(n). When the array isn't already sorted, sort first and the technique still applies: advance the left pointer when the sum is too small, retreat the right pointer when too large.
 
 **Problem:** *Two Sum II (sorted input)* and *3Sum* — find pairs/triplets summing to a target using converging pointers instead of nested loops.
 
@@ -336,12 +482,31 @@ for (int i = 0; i < n; i++) {
     }
 }
 ```
+```python
+# Two-pointer on a sorted array (pair sum)
+lo, hi = 0, len(nums) - 1
+while lo < hi:
+    s = nums[lo] + nums[hi]
+    if s == target: break
+    elif s < target: lo += 1
+    else: hi -= 1
+
+# Extended to triplets (3Sum): fix i, two-pointer the rest
+nums.sort()
+for i in range(n):
+    l, r = i + 1, n - 1
+    while l < r:
+        s = nums[i] + nums[l] + nums[r]
+        if s == 0: l += 1; r -= 1
+        elif s < 0: l += 1
+        else: r -= 1
+```
 
 ---
 
 ### 18. Sliding Window
 
-A variable- or fixed-size window defined by two pointers. Expand the right pointer to grow; shrink the left pointer when a constraint is violated. Achieves O(n) for problems that would otherwise be O(n²). For a *fixed*-size window, no shrinking logic is needed — just subtract the element leaving and add the one entering.
+A variable- or fixed-size window defined by two pointers (`lo` and `hi`). In C++, use `unordered_set<char>` or `unordered_map<char,int>` for window state; in Python, use `set()` or `collections.Counter()` respectively. Expand the right pointer to grow; shrink the left pointer when a constraint is violated. Achieves O(n) for problems that would otherwise be O(n²). For a *fixed*-size window, no shrinking logic is needed — just subtract the element leaving and add the one entering.
 
 > **📐 Math:** Despite the nested-looking while loop, total pointer movement is bounded: `lo` and `hi` each move forward at most $n$ times across the whole run, never backward. So total work is $O(n) + O(n) = O(n)$, not $O(n^2)$ — this is the *amortized* argument that makes sliding window linear.
 
@@ -366,12 +531,28 @@ for (int i = k; i < (int)nums.size(); i++) {
     best2 = max(best2, sum);
 }
 ```
+```python
+# Variable-size window: longest substring without repeats
+win = set()
+lo = best = 0
+for hi, c in enumerate(s):
+    while c in win: win.remove(s[lo]); lo += 1
+    win.add(c)
+    best = max(best, hi - lo + 1)
+
+# Fixed-size window of length k: max sum subarray
+window_sum = sum(nums[:k])
+best2 = window_sum
+for i in range(k, len(nums)):
+    window_sum += nums[i] - nums[i - k]
+    best2 = max(best2, window_sum)
+```
 
 ---
 
 ### 19. Sliding Window with Frequency Counting
 
-Track how many times each element appears inside the current window. The maximum frequency determines whether the window can be made uniform with at most k replacements.
+Track how many times each element appears inside the current window using a frequency map. In C++, use `unordered_map<char,int>`; in Python, use `collections.Counter()` or a plain `dict()` with manual tracking. The maximum frequency determines whether the window can be made uniform with at most k replacements.
 
 > **📐 Math:** If a window of length $L$ has max character frequency $f$, it can be made uniform with $L - f$ replacements (replace everything that isn't the majority character). The window is valid exactly when $L - f \le k$, i.e. $(hi - lo + 1) - \text{maxFreq} \le k$ — that single inequality is the entire correctness argument for the shrink condition.
 
@@ -385,12 +566,21 @@ for (int hi = 0; hi < (int)s.size(); hi++) {
     if ((hi - lo + 1) - maxFreq > k) freq[s[lo++]]--;
 }
 ```
+```python
+from collections import Counter
+freq = Counter()
+lo = max_freq = 0
+for hi, c in enumerate(s):
+    freq[c] += 1
+    max_freq = max(max_freq, freq[c])
+    if (hi - lo + 1) - max_freq > k: freq[s[lo]] -= 1; lo += 1
+```
 
 ---
 
 ### 20. Greedy Algorithms
 
-At each step commit to the locally optimal choice and never reconsider it. Works when the problem has the *greedy-choice property*: local optima compose into a global optimum. Examples: buy-sell stock, jump game, interval scheduling.
+At each step commit to the locally optimal choice and never reconsider it. Works when the problem has the *greedy-choice property*: local optima compose into a global optimum. Examples: buy-sell stock, jump game, interval scheduling. In C++, use `min()`/`max()` with `INT_MAX`; in Python, use `min()`/`max()` builtins or initialize with `float('inf')`.
 
 > **📐 Math:** Greedy correctness requires proving the *exchange argument*: any optimal solution can be transformed, step by step, into the greedy solution without making it worse. For buy-low-sell-high, tracking running min $m$ and updating $\text{profit} = \max(\text{profit}, \text{price} - m)$ works because the best sell day for any fixed buy day is irrelevant — only the cheapest price-so-far matters, so a single pass suffices instead of checking all $O(n^2)$ buy/sell pairs.
 
@@ -403,6 +593,13 @@ for (int p : prices) {
     maxProfit = max(maxProfit, p - minBuy);
 }
 ```
+```python
+min_buy = float('inf')
+max_profit = 0
+for p in prices:
+    min_buy = min(min_buy, p)
+    max_profit = max(max_profit, p - min_buy)
+```
 
 ---
 
@@ -411,7 +608,7 @@ for (int p : prices) {
 
 ### 21. Stack Data Structure
 
-Last-In-First-Out (LIFO). Push elements when processing; pop when a matching or complementary element is found, e.g. bracket matching. `std::stack` wraps a `deque` by default.
+Last-In-First-Out (LIFO). In C++, use `stack<char>` from `<stack>` which wraps a `deque` by default; in Python, use a plain `list` with `.append()` (push) and `.pop()` (pop). Push elements when processing; pop when a matching or complementary element is found, e.g. bracket matching.
 
 **Problem:** *Valid Parentheses* — check whether brackets in a string are properly matched and nested.
 
@@ -429,12 +626,21 @@ for (char c : s) {
 }
 return st.empty();
 ```
+```python
+match = {')': '(', ']': '[', '}': '{'}
+st = []
+for c in s:
+    if c in match:
+        if not st or st.pop() != match[c]: break
+    else: st.append(c)
+return len(st) == 0
+```
 
 ---
 
 ### 22. Queue Data Structure
 
-First-In-First-Out (FIFO). `std::queue`: `push` to back, `front` to peek, `pop` to remove. Essential for BFS. Snapshot `q.size()` before the inner loop to process one level at a time.
+First-In-First-Out (FIFO). In C++, use `std::queue` with `push` to back, `front` to peek, `pop` to remove. In Python, use `collections.deque` for O(1) popleft. Essential for BFS. Snapshot `q.size()` before the inner loop to process one level at a time.
 
 **Problem:** General FIFO usage pattern, as used in BFS (see *Trees & Tries* and *Graphs* sections).
 
@@ -444,6 +650,12 @@ q.push(1); q.push(2);       // enqueue
 int front = q.front(); q.pop(); // FIFO: front = 1
 // In BFS: enqueue neighbors, dequeue to process
 ```
+```python
+from collections import deque
+q = deque()
+q.append(1); q.append(2)       # enqueue
+front = q[0]; q.popleft()      # FIFO: front = 1
+```
 
 ---
 
@@ -451,7 +663,7 @@ int front = q.front(); q.pop(); // FIFO: front = 1
 
 ### 23. Binary Search
 
-Repeatedly halve the search space by comparing the middle element to the target. Requires a sorted (or monotone) input. Always compute `mid = left + (right - left) / 2` to avoid integer overflow. Time O(log n).
+Repeatedly halve the search space by comparing the middle element to the target. Requires a sorted (or monotone) input. Always compute `mid = left + (right - left) / 2` to avoid integer overflow — in Python, `mid = (lo + hi) // 2` works directly. Time O(log n). In C++, use `int lo = 0, hi = (int)nums.size() - 1;`; in Python, use `lo, hi = 0, len(nums) - 1`.
 
 > **📐 Math:** Each iteration discards half the remaining search space, so after $t$ iterations the space shrinks from $n$ to $n/2^t$. Solving $n/2^t = 1$ gives $t = \log_2 n$ — the source of binary search's $O(\log n)$ bound.
 
@@ -467,12 +679,21 @@ while (lo <= hi) {
 }
 return -1;
 ```
+```python
+lo, hi = 0, len(nums) - 1
+while lo <= hi:
+    mid = (lo + hi) // 2
+    if nums[mid] == target: return mid
+    elif nums[mid] < target: lo = mid + 1
+    else: hi = mid - 1
+return -1
+```
 
 ---
 
 ### 24. Binary Search on a Rotated Sorted Array
 
-A rotated sorted array splits into two sorted halves. Exactly one of the two halves defined by `mid` is always fully sorted — use that to determine which half the target lies in. To find the minimum specifically, compare `nums[mid]` to `nums[hi]` instead.
+A rotated sorted array splits into two sorted halves. Exactly one of the two halves defined by `mid` is always fully sorted — use that to determine which half the target lies in. In C++, use `unordered_map` for lookups; in Python, use `dict()` for the same. To find the minimum specifically, compare `nums[mid]` to `nums[hi]` instead.
 
 > **📐 Math:** Comparing $\text{nums}[mid]$ to $\text{nums}[hi]$ (not $\text{nums}[lo]$) handles duplicates and avoids edge-case ambiguity: if $\text{nums}[mid] > \text{nums}[hi]$, the minimum must lie strictly to the right of $mid$ (since a sorted run can't 'wrap' over a larger value), so $lo = mid+1$ is always safe to discard $mid$ itself.
 
@@ -503,6 +724,27 @@ while (lo <= hi) {
 }
 return -1;
 ```
+```python
+# Find minimum in rotated sorted array
+lo, hi = 0, len(nums) - 1
+while lo < hi:
+    mid = (lo + hi) // 2
+    if nums[mid] > nums[hi]: lo = mid + 1
+    else: hi = mid
+
+# Search for target in rotated sorted array
+lo, hi = 0, len(nums) - 1
+while lo <= hi:
+    mid = (lo + hi) // 2
+    if nums[mid] == target: return mid
+    if nums[lo] <= nums[mid]:  # left half sorted
+        if nums[lo] <= target < nums[mid]: hi = mid - 1
+        else: lo = mid + 1
+    else:                       # right half sorted
+        if nums[mid] < target <= nums[hi]: lo = mid + 1
+        else: hi = mid - 1
+return -1
+```
 
 ---
 
@@ -511,7 +753,7 @@ return -1;
 
 ### 25. Linked List Fundamentals
 
-A chain of nodes, each holding a value and a pointer to the next node. Traversal is O(n); random access does not exist. Always check for `nullptr` before dereferencing. Redirecting `next` pointers is the core operation — always save the next node before overwriting a pointer, or you'll lose the rest of the list.
+A chain of nodes, each holding a value and a pointer to the next node. Traversal is O(n); random access does not exist. Always check for `nullptr` before dereferencing. In C++, define a `struct ListNode` with `int val` and `ListNode* next`; in Python, use a `class ListNode` with `val` and `self.next`. Redirecting `next` pointers is the core operation — always save the next node before overwriting a pointer, or you'll lose the rest of the list.
 
 **Problem:** General traversal/mutation pattern used across all linked-list problems.
 
@@ -529,12 +771,30 @@ cur->next     = prev;      // redirect
 prev          = cur;       // advance prev
 cur           = nxt;       // advance cur
 ```
+```python
+class ListNode:
+    def __init__(self, x):
+        self.val = x
+        self.next = None
+
+# Traversal
+cur = head
+while cur:
+    process(cur.val)
+    cur = cur.next
+
+# Save next before overwriting
+nxt = cur.next
+cur.next = prev
+prev = cur
+cur = nxt
+```
 
 ---
 
 ### 26. Dummy Node Pattern
 
-Prepend a sentinel node so the head can be treated like any other node. Eliminates special-casing the head in insertions and deletions. Return `dummy.next` as the new head. The same trick powers *Remove Nth Node From End*: advance a leader pointer n steps ahead, then walk both pointers until the leader hits `nullptr` — the trailer is now just before the target.
+Prepend a sentinel node so the head can be treated like any other node. In C++, use `ListNode dummy(0); dummy.next = head;`; in Python, use `dummy = ListNode(0); dummy.next = head;`. Eliminates special-casing the head in insertions and deletions. Return `dummy.next` as the new head. The same trick powers *Remove Nth Node From End*: advance a leader pointer n steps ahead, then walk both pointers until the leader hits `nullptr` — the trailer is now just before the target.
 
 > **📐 Math:** Advancing `fast` $n$ steps ahead first creates a fixed gap of $n$ between `fast` and `prev`. When `fast` reaches the end (position $L$, the list length), `prev` is at position $L - n$ — exactly one before the node to remove. This converts a two-pass problem (count length, then remove) into one pass.
 
@@ -548,12 +808,23 @@ while (fast) { prev = prev->next; fast = fast->next; }
 prev->next = prev->next->next;
 return dummy.next;
 ```
+```python
+dummy = ListNode(0)
+dummy.next = head
+prev, fast = dummy, head
+for _ in range(n): fast = fast.next
+while fast:
+    prev = prev.next
+    fast = fast.next
+prev.next = prev.next.next
+return dummy.next
+```
 
 ---
 
 ### 27. Fast and Slow Pointers (Floyd's Algorithm)
 
-Two pointers advancing at different speeds (1 vs 2 steps). When fast reaches the end, slow is at the midpoint. If there is a cycle, the pointers will eventually meet. To find the cycle's *entry point*, reset one pointer to head and advance both one step at a time — they will meet exactly at the start of the cycle.
+Two pointers advancing at different speeds (1 vs 2 steps). In C++, use `ListNode* slow = head, *fast = head;`; in Python, use `slow = fast = head`. When fast reaches the end, slow is at the midpoint. If there is a cycle, the pointers will eventually meet. To find the cycle's *entry point*, reset one pointer to head and advance both one step at a time — they will meet exactly at the start of the cycle.
 
 > **📐 Math:** If a cycle exists with the fast pointer moving 2 steps/tick and slow 1 step/tick, the gap between them shrinks by exactly 1 each tick. Since the gap is bounded by the cycle length $L$, they must meet within at most $L$ ticks. Let $a$ be the distance from head to the cycle start and $c$ the cycle length. By the first meeting, slow has traveled $a+x$ and fast $a+x+nc$ for some $x \ge 0, n \ge 1$; since fast moves twice as fast, $2(a+x) = a+x+nc$, so $a = nc - x$. That's exactly why resetting one pointer to head and advancing both at speed 1 makes them meet at the cycle's entrance.
 
@@ -571,12 +842,27 @@ slow = head;
 while (slow != fast) { slow = slow->next; fast = fast->next; }
 return slow; // cycle entry node
 ```
+```python
+# Phase 1: detect a cycle
+slow = fast = head
+while fast and fast.next:
+    slow = slow.next
+    fast = fast.next.next
+    if slow == fast: break
+
+# Phase 2: find the entry point
+slow = head
+while slow != fast:
+    slow = slow.next
+    fast = fast.next
+return slow
+```
 
 ---
 
 ### 28. Linked List Reversal
 
-Change each node's `next` pointer to its predecessor. Requires three variables: `prev`, `cur`, `nxt`. After the loop `prev` is the new head. Can also be done recursively, mirroring the list structure.
+Change each node's `next` pointer to its predecessor. Requires three variables: `prev`, `cur`, `nxt`. In C++, initialize `ListNode* prev = nullptr, *cur = head;`; in Python, `prev, cur = None, head`. After the loop `prev` is the new head. Can also be done recursively, mirroring the list structure.
 
 > **📐 Math:** Reversal is a bijection that maps node $i$'s `next` pointer backward: in the new list, what was `prev` becomes the successor of `cur`. After $n$ steps every pointer has flipped exactly once, so the total work is $O(n)$ with no extra space — it's just relabeling $n$ arrows, not rebuilding the list.
 
@@ -601,12 +887,30 @@ ListNode* reverse(ListNode* head) {
     return newHead;
 }
 ```
+```python
+# Iterative
+cur, prev = head, None
+while cur:
+    nxt = cur.next
+    cur.next = prev
+    prev = cur
+    cur = nxt
+return prev  # new head
+
+# Recursive
+def reverse(head):
+    if not head or not head.next: return head
+    new_head = reverse(head.next)
+    head.next.next = head
+    head.next = None
+    return new_head
+```
 
 ---
 
 ### 29. Merging / Interleaving Linked Lists
 
-Compare the heads of both lists, attach the smaller node to the result, and advance that pointer — used to merge two *sorted* lists. A different pattern, interleaving, alternates picking from each list regardless of value — used in *Reorder List* after finding the midpoint and reversing the second half.
+Compare the heads of both lists, attach the smaller node to the result, and advance that pointer — used to merge two *sorted* lists. In C++, use a dummy node `ListNode d(0); ListNode* c = &d;`; in Python, `d = ListNode(0); c = d`. A different pattern, interleaving, alternates picking from each list regardless of value — used in *Reorder List* after finding the midpoint and reversing the second half.
 
 > **📐 Math:** Each comparison advances exactly one of the two list pointers, and the loop ends when one list is exhausted. Since the pointers together can advance at most $n + m$ times total, the merge is $O(n+m)$, not $O(n \cdot m)$.
 
@@ -633,12 +937,33 @@ while (p2) {
     p1 = n1; p2 = n2;
 }
 ```
+```python
+# Merge two sorted lists
+def merge(l1, l2):
+    d = ListNode(0)
+    c = d
+    while l1 and l2:
+        if l1.val <= l2.val:
+            c.next = l1; l1 = l1.next
+        else:
+            c.next = l2; l2 = l2.next
+        c = c.next
+    c.next = l1 or l2
+    return d.next
+
+# Interleave two lists: l1->l2->l1->l2->... (Reorder List)
+p1, p2 = head, second
+while p2:
+    n1, n2 = p1.next, p2.next
+    p1.next = p2; p2.next = n1
+    p1, p2 = n1, n2
+```
 
 ---
 
 ### 30. Merge K Sorted Lists (Heap and Divide-and-Conquer)
 
-Two strategies for merging k sorted lists: (1) a min-heap of `(value, node)` pairs, always extracting the globally smallest node in O(log k); (2) divide-and-conquer, pairing up lists and merging recursively.
+Two strategies for merging k sorted lists: (1) a min-heap of `(value, node)` pairs, always extracting the globally smallest node in O(log k). In C++, use `priority_queue<pair<int,ListNode*>, vector<...>, greater<>>`; in Python, use `heapq` with `(node.val, node)` tuples. (2) divide-and-conquer, pairing up lists and merging recursively.
 
 > **📐 Math:** With $k$ lists and total $N$ nodes, the heap approach costs $O(N \log k)$ — each of $N$ extractions costs $O(\log k)$ since the heap never holds more than $k$ nodes. The divide-and-conquer approach achieves the same bound via the recurrence $T(k) = 2T(k/2) + O(N)$, which the Master Theorem solves to $O(N \log k)$ — same total work, distributed across $\log_2 k$ merge rounds instead of one heap.
 
@@ -664,6 +989,27 @@ ListNode* mergeK(vector<ListNode*>& L, int l, int r) {
     return merge(mergeK(L, l, mid), mergeK(L, mid+1, r));
 }
 ```
+```python
+import heapq
+
+# Min-heap approach
+pq = []
+for l in lists:
+    if l: heapq.heappush(pq, (l.val, l))
+d = ListNode(0)
+cur = d
+while pq:
+    _, node = heapq.heappop(pq)
+    cur.next = node; cur = cur.next
+    if node.next: heapq.heappush(pq, (node.next.val, node.next))
+return d.next
+
+# Divide-and-conquer approach (reuses merge from Concept 29)
+def mergeK(lists, l, r):
+    if l == r: return lists[l]
+    mid = (l + r) // 2
+    return merge(mergeK(lists, l, mid), mergeK(lists, mid + 1, r))
+```
 
 ---
 
@@ -672,7 +1018,7 @@ ListNode* mergeK(vector<ListNode*>& L, int l, int r) {
 
 ### 31. Binary Tree Structure & Traversal
 
-Each node has at most two children (left and right). Every recursive tree function follows the same shape: (1) handle the `nullptr` base case, (2) process the current node, (3) recurse left, (4) recurse right. Three orderings name *where* step 2 happens: preorder (root first — good for serializing/cloning), inorder (root between children — sorted output for a BST), postorder (root last — use when a parent's result depends on its children, e.g. height or diameter).
+Each node has at most two children (left and right). In C++, define a `struct TreeNode` with `left`/`right` pointers; in Python, define a class with `self.left` and `self.right` attributes. Every recursive tree function follows the same shape: (1) handle the `nullptr`/`None` base case, (2) process the current node, (3) recurse left, (4) recurse right. Three orderings name *where* step 2 happens: preorder (root first — good for serializing/cloning), inorder (root between children — sorted output for a BST), postorder (root last — use when a parent's result depends on its children, e.g. height or diameter).
 
 > **📐 Math:** A balanced binary tree with $n$ nodes has height $h \approx \log_2 n$, since each level can hold up to $2^{\text{level}}$ nodes and the levels sum to $n = 2^0 + 2^1 + \ldots + 2^h$ — this is why balanced-tree operations are $O(\log n)$. Tree recursion that does $O(1)$ work per node and visits both children follows $T(n) = 2T(n/2) + O(1)$, which the Master Theorem solves to $O(n)$ total: every node is visited exactly once.
 
@@ -694,11 +1040,40 @@ void in  (TreeNode* n) { if(!n) return; in(n->left);  visit(n); in(n->right);   
 void post(TreeNode* n) { if(!n) return; post(n->left); post(n->right); visit(n); }
 ```
 
+```python
+class TreeNode:
+    def __init__(self, x):
+        self.val = x
+        self.left = self.right = None
+
+def height(node):  # postorder: children before parent
+    if not node: return 0  # base case
+    return 1 + max(height(node.left), height(node.right))
+
+def preorder(n):
+    if not n: return
+    visit(n.val)
+    preorder(n.left)
+    preorder(n.right)
+
+def inorder(n):
+    if not n: return
+    inorder(n.left)
+    visit(n.val)
+    inorder(n.right)
+
+def postorder(n):
+    if not n: return
+    postorder(n.left)
+    postorder(n.right)
+    visit(n.val)
+```
+
 ---
 
 ### 32. Breadth-First Search (BFS) on Trees
 
-Visit all nodes at depth d before any node at depth d+1, using a queue. Snapshot `q.size()` at the start of each while-loop iteration to isolate exactly one level per inner loop.
+Visit all nodes at depth d before any node at depth d+1, using a queue. In C++, use `queue<TreeNode*>` with `q.size()` to snapshot level size; in Python, use `collections.deque` with `len(q)`. Snapshot the queue size at the start of each while-loop iteration to isolate exactly one level per inner loop.
 
 **Problem:** *Binary Tree Level Order Traversal* — return node values grouped by depth.
 
@@ -716,11 +1091,25 @@ while (!q.empty()) {
 }
 ```
 
+```python
+from collections import deque
+
+q = deque()
+if root: q.append(root)
+while q:
+    sz = len(q)            # snapshot level size
+    for _ in range(sz):
+        n = q.popleft()
+        process(n.val)
+        if n.left:  q.append(n.left)
+        if n.right: q.append(n.right)
+```
+
 ---
 
 ### 33. Stack-based Iteration (Iterative DFS)
 
-Convert recursive DFS into an explicit loop using `std::stack`, to avoid stack-overflow risk on very deep trees. Push the right child before the left so the left is popped (and processed) first, mirroring preorder recursion. The same explicit-stack trick supports iterative *inorder*: push left children until null, pop, process, then move right.
+Convert recursive DFS into an explicit loop using `std::stack` in C++ or a plain `list` in Python, to avoid stack-overflow risk on very deep trees. Push the right child before the left so the left is popped (and processed) first, mirroring preorder recursion. In Python, `list.append()` is push and `list.pop()` is pop. The same explicit-stack trick supports iterative *inorder*: push left children until null, pop, process, then move right.
 
 **Problem:** *Binary Tree Preorder Traversal* and *Binary Tree Inorder Traversal*, iterative versions.
 
@@ -745,11 +1134,33 @@ while (cur || !st.empty()) {
 }
 ```
 
+```python
+# Iterative preorder
+st = []
+if root: st.append(root)
+while st:
+    n = st.pop()
+    process(n.val)
+    if n.right: st.append(n.right)  # push right first
+    if n.left:  st.append(n.left)
+
+# Iterative inorder
+cur = root
+st = []
+while cur or st:
+    while cur:
+        st.append(cur)
+        cur = cur.left
+    cur = st.pop()
+    process(cur.val)
+    cur = cur.right
+```
+
 ---
 
 ### 34. Comparing Two Trees
 
-Two trees are identical if both are null, or both are non-null with equal values and recursively identical left and right subtrees. One mismatch anywhere returns `false`. The same shape (with one tree's children swapped) checks whether a tree is a mirror of itself.
+Two trees are identical if both are null (`nullptr` / `None`), or both are non-null with equal values and recursively identical left and right subtrees. One mismatch anywhere returns `False`. The same shape (with one tree's children swapped) checks whether a tree is a mirror of itself.
 
 **Problem:** *Same Tree* — check whether two binary trees are structurally identical with the same node values.
 
@@ -762,11 +1173,18 @@ bool isSame(TreeNode* p, TreeNode* q) {
 }
 ```
 
+```python
+def is_same(p, q):
+    if not p and not q: return True
+    if not p or not q or p.val != q.val: return False
+    return is_same(p.left, q.left) and is_same(p.right, q.right)
+```
+
 ---
 
 ### 35. Balanced Tree Check & Negative-Clamp Pattern
 
-A tree is height-balanced if, at every node, the heights of the left and right subtrees differ by at most 1, and both subtrees are themselves balanced. More generally, when combining subtree contributions in tree DP, clamp negative contributions to zero with `max(0, subtreeResult)` — a negative contribution is always worse than not taking that branch at all (used in *Binary Tree Maximum Path Sum*).
+A tree is height-balanced if, at every node, the heights of the left and right subtrees differ by at most 1, and both subtrees are themselves balanced. More generally, when combining subtree contributions in tree DP, clamp negative contributions to zero with `max(0, subtreeResult)` in C++ or `max(0, subtree_result)` in Python — a negative contribution is always worse than not taking that branch at all (used in *Binary Tree Maximum Path Sum*).
 
 ```cpp
 bool isBalanced(TreeNode* n) {
@@ -777,13 +1195,26 @@ bool isBalanced(TreeNode* n) {
 }
 ```
 
+```python
+# Balanced check with a height helper that returns [is_balanced, height]
+class Solution:
+    def isBalanced(self, root):
+        def check(node):
+            if not node: return [True, 0]
+            left_ok, left_h = check(node.left)
+            right_ok, right_h = check(node.right)
+            balanced = left_ok and right_ok and abs(left_h - right_h) <= 1
+            return [balanced, 1 + max(left_h, right_h)]
+        return check(root)[0]
+```
+
 **Problem:** *Balanced Binary Tree*.
 
 ---
 
 ### 36. Validate Binary Search Tree
 
-All values in the left subtree must be strictly less than the node; all in the right subtree strictly greater — for *every* ancestor, not just the immediate parent. Pass a shrinking `(lo, hi)` range down each recursive call: going left tightens `hi` to the parent's value, going right tightens `lo`.
+All values in the left subtree must be strictly less than the node; all in the right subtree strictly greater — for *every* ancestor, not just the immediate parent. Pass a shrinking `(lo, hi)` range down each recursive call: going left tightens `hi` to the parent's value, going right tightens `lo`. Use `long long` in C++ or `float('inf')` in Python to avoid overflow on boundary values.
 
 > **📐 Math:** BST validation is an inductive argument — if every node respects the $(lo, hi)$ bound passed to it, the whole subtree is a valid BST. Going left tightens $hi$ to the parent's value (everything in the left subtree must be less than the parent); going right tightens $lo$. This proves the BST property level by level instead of just checking the immediate parent.
 
@@ -798,12 +1229,25 @@ bool validate(TreeNode* n, long lo, long hi) {
 }
 // Call: validate(root, LONG_MIN, LONG_MAX)
 ```
+```python
+class TreeNode:
+    def __init__(self, x):
+        self.val = x
+        self.left = self.right = None
+
+def validate_bst(root):
+    def check(node, lo=float('-inf'), hi=float('inf')):
+        if not node: return True
+        if not (lo < node.val < hi): return False
+        return check(node.left, lo, node.val) and check(node.right, node.val, hi)
+    return check(root)
+```
 
 ---
 
 ### 37. Kth Smallest via Inorder Traversal
 
-Inorder traversal of a BST yields values in strictly increasing order, because of the BST invariant (left < node < right) applied recursively. Decrement a counter `k` during inorder traversal to find the kth smallest in O(h + k) — no need to traverse the whole tree or sort all n values.
+Inorder traversal of a BST yields values in strictly increasing order, because of the BST invariant (left < node < right) applied recursively. Decrement a counter `k` during inorder traversal to find the kth smallest in O(h + k) — no need to traverse the whole tree or sort all n values. In C++, use a global/member `k` and `result`; in Python, use a list `[k]` or `nonlocal` to mutate across recursion.
 
 > **📐 Math:** Inorder = sorted order is itself an inductive proof from the BST invariant. Decrementing $k$ as you go means you stop as soon as you've seen $k$ nodes, giving $O(h + k)$ instead of $O(n)$ for a full traversal plus sort.
 
@@ -817,6 +1261,24 @@ void inorder(TreeNode* n) {
     if (--k == 0) result = n->val;
     inorder(n->right);
 }
+```
+
+```python
+# Use a list or nonlocal for mutable counter across recursion
+class Solution:
+    def kthSmallest(self, root, k):
+        self.result = None
+        self._k = k
+        def inorder(n):
+            if not n: return
+            inorder(n.left)
+            self._k -= 1
+            if self._k == 0:
+                self.result = n.val
+                return
+            inorder(n.right)
+        inorder(root)
+        return self.result
 ```
 
 ---
@@ -835,6 +1297,20 @@ int goodNodes(TreeNode* n, int mx) {
     return cnt + goodNodes(n->left, mx) + goodNodes(n->right, mx);
 }
 ```
+
+```python
+class TreeNode:
+    def __init__(self, x):
+        self.val = x
+        self.left = self.right = None
+
+def count_good_nodes(root, mx=float('-inf')):
+    if not root: return 0
+    cnt = 1 if root.val >= mx else 0
+    mx = max(mx, root.val)
+    return cnt + count_good_nodes(root.left, mx) + count_good_nodes(root.right, mx)
+```
+
 
 ---
 
@@ -867,6 +1343,33 @@ int gain(TreeNode* n) {
 }
 ```
 
+```python
+class TreeNode:
+    def __init__(self, x):
+        self.val = x
+        self.left = self.right = None
+
+# Diameter
+diam = 0
+def depth(n):
+    global diam
+    if not n: return 0
+    l, r = depth(n.left), depth(n.right)
+    diam = max(diam, l + r)
+    return 1 + max(l, r)
+
+# Max path sum
+max_path = float('-inf')
+def gain(n):
+    global max_path
+    if not n: return 0
+    l = max(0, gain(n.left))
+    r = max(0, gain(n.right))
+    max_path = max(max_path, l + n.val + r)
+    return n.val + max(l, r)
+```
+
+
 ---
 
 ### 40. Lowest Common Ancestor (BST)
@@ -882,6 +1385,20 @@ TreeNode* lca(TreeNode* n, TreeNode* p, TreeNode* q) {
     return n; // split point
 }
 ```
+
+```python
+class TreeNode:
+    def __init__(self, x):
+        self.val = x
+        self.left = self.right = None
+
+def lca(root, p, q):
+    if not root: return None
+    if p.val < root.val and q.val < root.val: return lca(root.left, p, q)
+    if p.val > root.val and q.val > root.val: return lca(root.right, p, q)
+    return root
+```
+
 
 ---
 
@@ -899,6 +1416,20 @@ bool hasPath(TreeNode* n, int target) {
         || hasPath(n->right, target - n->val);
 }
 ```
+
+```python
+class TreeNode:
+    def __init__(self, x):
+        self.val = x
+        self.left = self.right = None
+
+def has_path_sum(root, target_sum):
+    if not root: return False
+    if not root.left and not root.right: return root.val == target_sum
+    target_sum -= root.val
+    return has_path_sum(root.left, target_sum) or has_path_sum(root.right, target_sum)
+```
+
 
 ---
 
@@ -918,6 +1449,29 @@ void serialize(TreeNode* n, string& out) {
 // Deserialize: read tokens in the same preorder; "N" => nullptr
 ```
 
+```python
+class TreeNode:
+    def __init__(self, x):
+        self.val = x
+        self.left = self.right = None
+
+def serialize(root):
+    if not root: return 'N'
+    return str(root.val) + ',' + serialize(root.left) + ',' + serialize(root.right)
+
+def deserialize(data):
+    tokens = iter(data.split(','))
+    def build():
+        val = next(tokens)
+        if val == 'N': return None
+        node = TreeNode(int(val))
+        node.left = build()
+        node.right = build()
+        return node
+    return build()
+```
+
+
 ---
 
 ### 43. N-ary Trees
@@ -936,6 +1490,19 @@ void dfs(Node* n) {
     for (Node* c : n->children) dfs(c);
 }
 ```
+
+```python
+class Node:
+    def __init__(self, val, children=None):
+        self.val = val
+        self.children = children or []
+
+def dfs(n):
+    if not n: return
+    for c in n.children:
+        dfs(c)
+```
+
 
 ---
 
@@ -968,6 +1535,35 @@ public:
 };
 ```
 
+```python
+class TrieNode:
+    def __init__(self):
+        self.children = {}
+        self.end = False
+
+class Trie:
+    def __init__(self):
+        self.root = TrieNode()
+
+    def insert(self, word):
+        cur = self.root
+        for c in word:
+            if c not in cur.children:
+                cur.children[c] = TrieNode()
+            cur = cur.children[c]
+        cur.end = True
+
+    def search(self, word):
+        cur = self.root
+        for c in word:
+            if c not in cur.children: return False
+            cur = cur.children[c]
+        return cur.end
+
+    # wildcard search ('.'): DFS, trying all children at that position
+```
+
+
 ---
 
 ### 45. Character & String Utilities for Tree/Trie Problems
@@ -982,6 +1578,16 @@ for (char c : s) {
     bool alp = isalpha(c);
 }
 ```
+
+```python
+for c in s:
+    idx = ord(c) - ord('a')      # 0-25 for lowercase
+    if c.isalpha():
+        pass  # alphabetic check
+    if c.isdigit():
+        pass  # digit check
+```
+
 
 ---
 
@@ -1002,6 +1608,19 @@ vector<vector<int>> adj(n);
 adj[u].push_back(v);                       // directed
 adj[u].push_back(v); adj[v].push_back(u);  // undirected
 ```
+
+```python
+# Adjacency list using dict of lists
+adj = {i: [] for i in range(n)}
+
+# Directed edge
+adj[u].append(v)
+
+# Undirected edges
+adj[u].append(v)
+adj[v].append(u)
+```
+
 
 ---
 
@@ -1030,6 +1649,29 @@ while (!q.empty()) {
 }
 ```
 
+```python
+from collections import deque
+
+# Graph DFS
+vis = [False] * n
+def dfs(u):
+    vis[u] = True
+    for v in adj[u]:
+        if not vis[v]:
+            dfs(v)
+
+# Graph BFS
+q = deque([src])
+vis[src] = True
+while q:
+    u = q.popleft()
+    for v in adj[u]:
+        if not vis[v]:
+            vis[v] = True
+            q.append(v)
+```
+
+
 ---
 
 ### 48. Multi-Source BFS
@@ -1054,6 +1696,26 @@ while (!q.empty()) {
 }
 ```
 
+```python
+from collections import deque
+
+# Multi-source BFS
+dist = [[-1]*C for _ in range(R)]
+q = deque()
+for r, c in sources:
+    q.append((r, c))
+    dist[r][c] = 0
+
+while q:
+    r, c = q.popleft()
+    for dr, dc in [(0,1),(0,-1),(1,0),(-1,0)]:
+        nr, nc = r+dr, c+dc
+        if 0 <= nr < R and 0 <= nc < C and dist[nr][nc] == -1:
+            dist[nr][nc] = dist[r][c] + 1
+            q.append((nr, nc))
+```
+
+
 ---
 
 ### 49. Union-Find (Disjoint Set Union)
@@ -1077,6 +1739,24 @@ void unite(int a, int b) {
     if (rnk[a] == rnk[b]) rnk[a]++;
 }
 ```
+
+```python
+parent = list(range(N))
+rank = [0] * N
+
+def find(x):
+    if parent[x] != x:
+        parent[x] = find(parent[x])  # path compression
+    return parent[x]
+
+def unite(a, b):
+    a, b = find(a), find(b)
+    if a == b: return
+    if rank[a] < rank[b]: a, b = b, a
+    parent[b] = a
+    if rank[a] == rank[b]: rank[a] += 1
+```
+
 
 ---
 
@@ -1114,6 +1794,39 @@ function<void(int)> dfs = [&](int u) {
 // Read stk top-to-bottom for topological order
 ```
 
+```python
+from collections import deque
+
+# Kahn's algorithm (BFS)
+indeg = [0] * n
+for u, v in edges:
+    indeg[v] += 1
+
+q = deque([i for i in range(n) if indeg[i] == 0])
+order = []
+while q:
+    u = q.popleft()
+    order.append(u)
+    for v in adj[u]:
+        indeg[v] -= 1
+        if indeg[v] == 0:
+            q.append(v)
+
+no_cycle = len(order) == n
+
+# DFS post-order reversed
+vis = [False] * n
+stk = []
+def dfs(u):
+    vis[u] = True
+    for v in adj[u]:
+        if not vis[v]:
+            dfs(v)
+    stk.append(u)
+# Read stk top-to-bottom for topological order
+```
+
+
 ---
 
 ### 51. Cycle Detection (Directed Graph)
@@ -1138,6 +1851,20 @@ bool hasCycle(int u) {
 }
 ```
 
+```python
+# 0=unvisited, 1=in-stack, 2=done
+st = [0] * n
+
+def has_cycle(u):
+    st[u] = 1
+    for v in adj[u]:
+        if st[v] == 1: return True
+        if st[v] == 0 and has_cycle(v): return True
+    st[u] = 2
+    return False
+```
+
+
 ---
 
 ### 52. Graph Construction from Pairwise Comparisons (Alien Dictionary)
@@ -1159,6 +1886,17 @@ for (int i = 0; i + 1 < (int)words.size(); i++) {
 // Then run Topological Sort on the resulting 26-node graph
 ```
 
+```python
+for i in range(len(words) - 1):
+    w1, w2 = words[i], words[i + 1]
+    for j in range(min(len(w1), len(w2))):
+        if w1[j] != w2[j]:
+            adj[ord(w1[j]) - ord('a')].append(ord(w2[j]) - ord('a'))
+            break
+# Then run Topological Sort on the resulting 26-node graph
+```
+
+
 ---
 
 
@@ -1169,6 +1907,7 @@ for (int i = 0; i + 1 < (int)words.size(); i++) {
 Break a problem into overlapping subproblems, solve each exactly once, and cache the result. Two equivalent styles: **top-down memoization** (recursive function + cache, computed lazily) and **bottom-up tabulation** (iterative array, filled in dependency order). Requires the problem to have *optimal substructure* (an optimal solution is built from optimal solutions to subproblems) and *overlapping subproblems* (the same subproblem recurs many times — otherwise plain recursion is already efficient).
 
 **Problem:** General DP shape, e.g. *Climbing Stairs* or *Fibonacci*-style recurrences.
+> **📐 Math:** Naive recursion without memoization recomputes overlapping subproblems exponentially often — e.g. fib$(n)$ makes $O(2^n)$ calls because fib$(n-2)$ is recomputed independently inside both fib$(n-1)$ and the direct fib$(n-2)$ branch. Caching collapses this to $O(n)$ since each of the $n$ distinct subproblems is solved exactly once. Naive Fibonacci's call count grows like $\varphi^n$ where $\varphi = (1+\sqrt{5})/2 \approx 1.618$ (the golden ratio) — that's the blowup memoization eliminates.
 
 ```cpp
 // Top-down (memoization)
@@ -1185,8 +1924,21 @@ dp[0] = baseValue;
 for (int i = 1; i <= n; i++) dp[i] = combine(dp[i - 1]);
 ```
 
-> **📐 Math:** Naive recursion without memoization recomputes overlapping subproblems exponentially often — e.g. fib$(n)$ makes $O(2^n)$ calls because fib$(n-2)$ is recomputed independently inside both fib$(n-1)$ and the direct fib$(n-2)$ branch. Caching collapses this to $O(n)$ since each of the $n$ distinct subproblems is solved exactly once. Naive Fibonacci's call count grows like $\varphi^n$ where $\varphi = (1+\sqrt{5})/2 \approx 1.618$ (the golden ratio) — that's the blowup memoization eliminates.
+```python
+# Top-down (memoization)
+memo = {}
+def solve(s):
+    if is_base(s): return base_value(s)
+    if s in memo: return memo[s]
+    memo[s] = combine(solve(smaller(s)))
+    return memo[s]
 
+# Bottom-up (tabulation)
+dp = [0] * (n + 1)
+dp[0] = base_value
+for i in range(1, n + 1):
+    dp[i] = combine(dp[i - 1])
+```
 ---
 
 ### 54. 1D DP: House Robber & Climbing Stairs
@@ -1215,6 +1967,24 @@ int rob(vector<int>& nums) {
 }
 ```
 
+```python
+# Climbing stairs
+dp = [0] * (n + 1)
+dp[0] = dp[1] = 1
+for i in range(2, n + 1):
+    dp[i] = dp[i - 1] + dp[i - 2]
+return dp[n]
+
+# House Robber: O(1) space
+def rob(nums):
+    prev2, prev1 = 0, 0
+    for x in nums:
+        cur = max(prev1, prev2 + x)
+        prev2, prev1 = prev1, cur
+    return prev1
+```
+
+
 ---
 
 ### 55. House Robber II (Circular)
@@ -1233,6 +2003,18 @@ auto linear = [&](int l, int r) {
 };
 return max(linear(0, n-2), linear(1, n-1));
 ```
+
+```python
+def rob(nums):
+    def linear(l, r):
+        a, b = 0, 0
+        for i in range(l, r + 1):
+            a, b = b, max(b, a + nums[i])
+        return b
+    if len(nums) == 1: return nums[0]
+    return max(linear(0, len(nums) - 2), linear(1, len(nums) - 1))
+```
+
 
 ---
 
@@ -1254,6 +2036,18 @@ for (int a = 1; a <= amount; a++)
 return dp[amount] > amount ? -1 : dp[amount];
 ```
 
+```python
+def coin_change(coins, amount):
+    dp = [amount + 1] * (amount + 1)
+    dp[0] = 0
+    for a in range(1, amount + 1):
+        for c in coins:
+            if c <= a:
+                dp[a] = min(dp[a], dp[a - c] + 1)
+    return dp[amount] if dp[amount] <= amount else -1
+```
+
+
 ---
 
 ### 57. Word Break (String Segmentation DP)
@@ -1274,6 +2068,21 @@ for (int i = 1; i <= n; i++)
 return dp[n];
 ```
 
+```python
+def word_break(s, wordDict):
+    word_set = set(wordDict)
+    n = len(s)
+    dp = [False] * (n + 1)
+    dp[0] = True
+    for i in range(1, n + 1):
+        for j in range(i):
+            if dp[j] and s[j:i] in word_set:
+                dp[i] = True
+                break
+    return dp[n]
+```
+
+
 ---
 
 ### 58. Kadane's Algorithm (Maximum Subarray)
@@ -1292,6 +2101,16 @@ for (int i = 1; i < (int)nums.size(); i++) {
 }
 return best;
 ```
+
+```python
+def max_subarray(nums):
+    cur = best = nums[0]
+    for i in range(1, len(nums)):
+        cur = max(nums[i], cur + nums[i])
+        best = max(best, cur)
+    return best
+```
+
 
 ---
 
@@ -1314,6 +2133,18 @@ for (int i = 1; i < (int)nums.size(); i++) {
 return res;
 ```
 
+```python
+def max_product(nums):
+    lo = hi = res = nums[0]
+    for i in range(1, len(nums)):
+        if nums[i] < 0: lo, hi = hi, lo
+        hi = max(nums[i], hi * nums[i])
+        lo = min(nums[i], lo * nums[i])
+        res = max(res, hi)
+    return res
+```
+
+
 ---
 
 ### 60. Grid Path Counting
@@ -1332,6 +2163,16 @@ for (int i = 1; i < m; i++)
 return dp[m-1][n-1];
 ```
 
+```python
+def unique_paths(m, n):
+    dp = [[1] * n for _ in range(m)]
+    for i in range(1, m):
+        for j in range(1, n):
+            dp[i][j] = dp[i-1][j] + dp[i][j-1]
+    return dp[m-1][n-1]
+```
+
+
 ---
 
 ### 61. Space-Optimized DP (Rolling Array)
@@ -1346,6 +2187,15 @@ for (int i = 0; i < m; i++)
     for (int j = 1; j <= n; j++)
         dp[j] = f(dp[j], dp[j-1]); // dp[j] (old row) and dp[j-1] (new row)
 ```
+
+```python
+# 1-D rolling array for grid DP
+dp = [0] * (n + 1)
+for i in range(m):
+    for j in range(1, n + 1):
+        dp[j] = f(dp[j], dp[j - 1])  # dp[j] from old row, dp[j-1] from new row
+```
+
 
 ---
 
@@ -1365,6 +2215,23 @@ for (int i = n - 2; i >= 0; i--)
     for (int j = i + 1; j < n; j++)
         dp[i][j] = (s[i] == s[j]) && (j - i < 3 || dp[i+1][j-1]);
 ```
+
+```python
+def longest_palindromic_substring(s):
+    n = len(s)
+    if n < 2: return s
+    dp = [[False] * n for _ in range(n)]
+    for i in range(n):
+        dp[i][i] = True
+    start, max_len = 0, 1
+    for i in range(n - 2, -1, -1):
+        for j in range(i + 1, n):
+            dp[i][j] = (s[i] == s[j]) and (j - i < 3 or dp[i+1][j-1])
+            if dp[i][j] and j - i + 1 > max_len:
+                start, max_len = i, j - i + 1
+    return s[start:start + max_len]
+```
+
 
 ---
 
@@ -1389,6 +2256,23 @@ for (int i = 0; i < n; i++) {
 }
 ```
 
+```python
+def manacher(s):
+    t = '#' + '#'.join(s) + '#'
+    n = len(t)
+    p = [0] * n
+    c = r = 0
+    for i in range(n):
+        if i < r:
+            p[i] = min(r - i, p[2*c - i])
+        while i + p[i] + 1 < n and i - p[i] - 1 >= 0 and t[i + p[i] + 1] == t[i - p[i] - 1]:
+            p[i] += 1
+        if i + p[i] > r:
+            c, r = i, i + p[i]
+    return p
+```
+
+
 ---
 
 
@@ -1410,6 +2294,21 @@ for (auto& cur : v) {
 }
 ```
 
+```python
+def merge(intervals):
+    if not intervals: return []
+    intervals.sort()
+    res = [intervals[0][:]]
+    for cur in intervals[1:]:
+        last = res[-1]
+        if cur[0] <= last[1]:
+            last[1] = max(last[1], cur[1])
+        else:
+            res.append(cur[:])
+    return res
+```
+
+
 ---
 
 ### 65. Overlap Detection
@@ -1423,6 +2322,16 @@ sort(v.begin(), v.end());
 for (int i = 1; i < (int)v.size(); i++)
     if (v[i][0] < v[i-1][1]) { /* overlap found */ }
 ```
+
+```python
+def has_overlap(intervals):
+    intervals.sort()
+    for i in range(1, len(intervals)):
+        if intervals[i][0] < intervals[i-1][1]:
+            return True
+    return False
+```
+
 
 ---
 
@@ -1443,6 +2352,21 @@ for (auto& [t, d] : ev) { cur += d; peak = max(peak, cur); }
 return peak;
 ```
 
+```python
+def min_meeting_rooms(intervals):
+    events = []
+    for s, e in intervals:
+        events.append((s, 1))
+        events.append((e, -1))
+    events.sort()
+    cur = peak = 0
+    for t, d in events:
+        cur += d
+        peak = max(peak, cur)
+    return peak
+```
+
+
 ---
 
 ### 67. Greedy Interval Scheduling
@@ -1458,6 +2382,20 @@ for (auto& iv : v) if (iv[0] >= last) { last = iv[1]; cnt++; }
 return (int)v.size() - cnt; // removals needed
 ```
 
+```python
+def erase_overlap_intervals(intervals):
+    if not intervals: return 0
+    intervals.sort(key=lambda x: x[1])
+    cnt = 0
+    last = float('-inf')
+    for iv in intervals:
+        if iv[0] >= last:
+            last = iv[1]
+            cnt += 1
+    return len(intervals) - cnt
+```
+
+
 ---
 
 ### 68. Binary Search on Interval End Times
@@ -1472,6 +2410,15 @@ When you need the most recent non-overlapping interval for each interval (e.g. t
 auto it = upper_bound(ends.begin(), ends.end(), ivs[i][0] - 1);
 int idx = (int)(it - ends.begin()) - 1; // last compatible interval
 ```
+
+```python
+import bisect
+
+# Find last interval ending before current start
+ends = [iv[1] for iv in ivs]
+idx = bisect.bisect_right(ends, ivs[i][0] - 1) - 1
+```
+
 
 ---
 
@@ -1494,6 +2441,17 @@ for (int i = 0; i < n; i++)
         swap(matrix[i][j], matrix[j][i]);
 for (auto& row : matrix) reverse(row.begin(), row.end());
 ```
+
+```python
+def rotate(matrix):
+    n = len(matrix)
+    for i in range(n):
+        for j in range(i + 1, n):
+            matrix[i][j], matrix[j][i] = matrix[j][i], matrix[i][j]
+    for row in matrix:
+        row.reverse()
+```
+
 
 ---
 
@@ -1519,6 +2477,22 @@ while (lo < hi) {
 }
 ```
 
+```python
+def rotate_inplace(matrix):
+    n = len(matrix)
+    lo, hi = 0, n - 1
+    while lo < hi:
+        for i in range(hi - lo):
+            tmp = matrix[lo][lo + i]
+            matrix[lo][lo + i] = matrix[hi - i][lo]
+            matrix[hi - i][lo] = matrix[hi][hi - i]
+            matrix[hi][hi - i] = matrix[lo + i][hi]
+            matrix[lo + i][hi] = tmp
+        lo += 1
+        hi -= 1
+```
+
+
 ---
 
 ### 71. Spiral Traversal (Shrinking Boundaries)
@@ -1540,6 +2514,26 @@ while (t <= b && l <= r) {
 }
 ```
 
+```python
+def spiral_order(matrix):
+    if not matrix: return []
+    t, b, l, r = 0, len(matrix) - 1, 0, len(matrix[0]) - 1
+    res = []
+    while t <= b and l <= r:
+        for c in range(l, r + 1): res.append(matrix[t][c])
+        t += 1
+        for c in range(t, b + 1): res.append(matrix[c][r])
+        r -= 1
+        if t <= b:
+            for c in range(r, l - 1, -1): res.append(matrix[b][c])
+            b -= 1
+        if l <= r:
+            for c in range(b, t - 1, -1): res.append(matrix[c][l])
+            l += 1
+    return res
+```
+
+
 ---
 
 ### 72. Direction Vectors for Grid Neighbors
@@ -1555,6 +2549,16 @@ for (int d = 0; d < 4; d++) {
     if (nr >= 0 && nr < R && nc >= 0 && nc < C) visit(nr, nc);
 }
 ```
+
+```python
+dr = [0, 0, 1, -1]
+dc = [1, -1, 0, 0]
+for d in range(4):
+    nr, nc = r + dr[d], c + dc[d]
+    if 0 <= nr < R and 0 <= nc < C:
+        visit(nr, nc)
+```
+
 
 ---
 
@@ -1574,6 +2578,23 @@ for (int r : rowSet) fill(m[r].begin(), m[r].end(), 0);
 for (int c : colSet) for (int r = 0; r < R; r++) m[r][c] = 0;
 ```
 
+```python
+def set_zeroes(matrix):
+    R, C = len(matrix), len(matrix[0])
+    row_set = set()
+    col_set = set()
+    for r in range(R):
+        for c in range(C):
+            if matrix[r][c] == 0:
+                row_set.add(r)
+                col_set.add(c)
+    for r in row_set:
+        for c in range(C): matrix[r][c] = 0
+    for c in col_set:
+        for r in range(R): matrix[r][c] = 0
+```
+
+
 ---
 
 ### 74. Sign-as-Flag Marking (O(1) Space Membership)
@@ -1590,6 +2611,18 @@ for (int i = 0; i < n; i++)
     if (nums[i] > 0) return i + 1; // i+1 never appeared
 return n + 1;
 ```
+
+```python
+def first_missing_positive(nums):
+    n = len(nums)
+    for x in nums:
+        i = abs(x) - 1
+        if 0 <= i < n: nums[i] = -abs(nums[i])
+    for i in range(n):
+        if nums[i] > 0: return i + 1
+    return n + 1
+```
+
 
 ---
 
@@ -1610,6 +2643,17 @@ for (int k = 31; k >= 0; k--) cout << ((x >> k) & 1);
 // Two's complement of x: ~x + 1
 int neg = ~x + 1;
 ```
+
+```python
+# Print 32-bit binary
+for k in range(31, -1, -1):
+    print((x >> k) & 1, end='')
+print()
+
+# Two's complement of x: ~x + 1 (in Python, use -x)
+neg = -x  # Python handles two's complement naturally
+```
+
 
 **Pattern:** background concept underlying every bit-manipulation problem below, not a single problem itself.
 
@@ -1632,6 +2676,18 @@ int  div4  = x >> 2;
 int  mul8  = x << 3;
 ```
 
+```python
+odd = x & 1            # LSB check
+mask = 1 << k          # select bit k
+set_ = x | mask        # set bit k
+clr = x & ~mask        # clear bit k
+tog = x ^ mask         # toggle bit k
+bit_k = (x >> k) & 1   # extract bit k
+div4 = x >> 2
+mul8 = x << 3
+```
+
+
 **Pattern:** the operator toolkit reused across every bit-manipulation problem (e.g. *Single Number*, *Counting Bits*), not a problem itself.
 
 ---
@@ -1653,6 +2709,19 @@ bool isPow2 = x > 0 && !(x & (x - 1));
 int  lsb    = x & (-x);          // isolate lowest set bit
 ```
 
+```python
+# Count set bits (Brian Kernighan)
+cnt = 0
+t = x
+while t:
+    t &= t - 1
+    cnt += 1
+
+is_pow2 = x > 0 and not (x & (x - 1))
+lsb = x & (-x)
+```
+
+
 ---
 
 ### 78. DP on Bit Count
@@ -1668,6 +2737,15 @@ vector<int> dp(n + 1, 0);
 for (int i = 1; i <= n; i++) dp[i] = dp[i >> 1] + (i & 1);
 return dp;
 ```
+
+```python
+def count_bits(n):
+    dp = [0] * (n + 1)
+    for i in range(1, n + 1):
+        dp[i] = dp[i >> 1] + (i & 1)
+    return dp
+```
+
 
 ---
 
@@ -1689,6 +2767,17 @@ int missing = n;
 for (int i = 0; i < n; i++) missing ^= i ^ nums[i];
 ```
 
+```python
+# Single Number
+res = 0
+for x in nums: res ^= x
+
+# Missing Number
+missing = len(nums)
+for i, x in enumerate(nums): missing ^= i ^ x
+```
+
+
 ---
 
 ### 80. Sum Formula as a Cross-Check
@@ -1705,6 +2794,15 @@ long actual = 0;
 for (int x : nums) actual += x;
 return (int)(expected - actual);
 ```
+
+```python
+# Alternative: sum formula for missing number
+n = len(nums)
+expected = n * (n + 1) // 2
+actual = sum(nums)
+return expected - actual
+```
+
 
 ---
 
@@ -1728,6 +2826,18 @@ void backtrack(vector<int>& path, /* remaining choices */) {
 }
 ```
 
+```python
+def backtrack(path, remaining_choices):
+    if is_complete(path):
+        results.append(path[:])
+        return
+    for choice in remaining_choices:
+        path.append(choice)
+        backtrack(path, updated_choices)
+        path.pop()
+```
+
+
 ---
 
 ### 82. Grid Backtracking (Word Search)
@@ -1748,6 +2858,28 @@ bool dfs(vector<vector<char>>& board, string& word, int r, int c, int i) {
     return found;
 }
 ```
+
+```python
+def word_search(board, word):
+    R, C = len(board), len(board[0])
+    def dfs(r, c, i):
+        if i == len(word): return True
+        if r < 0 or r >= R or c < 0 or c >= C or board[r][c] != word[i]:
+            return False
+        tmp = board[r][c]
+        board[r][c] = '#'
+        found = (dfs(r+1, c, i+1) or dfs(r-1, c, i+1) or
+                 dfs(r, c+1, i+1) or dfs(r, c-1, i+1))
+        board[r][c] = tmp
+        return found
+
+    for r in range(R):
+        for c in range(C):
+            if dfs(r, c, 0):
+                return True
+    return False
+```
+
 
 ---
 
@@ -1775,5 +2907,27 @@ double median() {
            : (lo.top() + hi.top()) / 2.0;
 }
 ```
+
+```python
+import heapq
+
+class MedianFinder:
+    def __init__(self):
+        self.lo = []    # max-heap (negate values)
+        self.hi = []    # min-heap
+
+    def add_num(self, n):
+        heapq.heappush(self.lo, -n)
+        heapq.heappush(self.hi, -self.lo[0])
+        heapq.heappop(self.lo)
+        if len(self.lo) < len(self.hi):
+            heapq.heappush(self.lo, -heapq.heappop(self.hi))
+
+    def find_median(self):
+        if len(self.lo) > len(self.hi):
+            return -self.lo[0]
+        return (-self.lo[0] + self.hi[0]) / 2.0
+```
+
 
 ---
