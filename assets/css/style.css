@@ -78,7 +78,9 @@ a:hover { color: var(--accent2); text-decoration: underline; }
 
 /* ─── Header ─── */
 .site-header {
-  position: fixed; top: 0; left: 0; right: 0; width: 100vw;
+  position: fixed; top: 0; left: 0; right: 0; width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
   background: rgba(10,10,15,.8);
   backdrop-filter: blur(16px) saturate(1.5);
   border-bottom: 1px solid var(--border);
@@ -298,7 +300,13 @@ blockquote strong {
 }
 
 /* ─── Viewport constraint (prevents horizontal scroll on mobile) ─── */
+/* iOS overscroll fix: use `env(safe-area-inset*)` + `dvh`/`100%` width on
+   header instead of `100vw`, and apply -webkit-overflow-scrolling only
+   to body (not html) to avoid the momentum-scroll flicker on settle. */
 html {
+  overflow-x: hidden;
+}
+body {
   overflow-x: hidden;
   -webkit-overflow-scrolling: touch;
 }
