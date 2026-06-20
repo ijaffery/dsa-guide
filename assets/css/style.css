@@ -78,7 +78,7 @@ a:hover { color: var(--accent2); text-decoration: underline; }
 
 /* ─── Header ─── */
 .site-header {
-  position: fixed; top: 0; left: 0; right: 0; width: 100%;
+  position: fixed; top: 0; left: 0; right: 0; width: 100%; z-index: 1000;
   max-width: 100%;
   box-sizing: border-box;
   background: rgba(10,10,15,.8);
