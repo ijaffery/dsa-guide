@@ -428,25 +428,48 @@ blockquote strong {
   .topic { break-inside: avoid; border: 1px solid #ccc; }
 }
 
-/* ─── Prevent horizontal overflow on mobile ─── */
-* {
+/* ─── Viewport constraint (prevents horizontal scroll on mobile) ─── */
+html {
   overflow-x: hidden;
-}
-html, body {
-  overflow-x: hidden;
-  max-width: 100vw;
+  -webkit-overflow-scrolling: touch;
 }
 
 /* ─── Mobile tweaks ─── */
+@media (max-width: 768px) {
+  body {
+    padding-top: 52px;
+  }
+  .container {
+    padding: 0 1rem;
+    width: 100%;
+  }
+  .site-header .container {
+    padding: .5rem 1rem;
+  }
+  .hero {
+    padding: 5rem 0 2rem;
+  }
+  .hero h1 {
+    font-size: 1.75rem;
+  }
+  h2 {
+    font-size: 1.35rem;
+    margin: 2.5rem 0 1rem;
+  }
+  .topic {
+    padding: 1rem;
+  }
+  pre {
+    padding: .75rem 1rem;
+    font-size: .75rem;
+  }
+  .toc ul {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ─── Large screens ─── */
 @media (min-width: 1200px) {
   .container { padding: 0 3rem; }
 }
 
-/* ─── Mobile tweaks ─── */
-@media (max-width: 600px) {
-  .container { padding: 0 1rem; }
-  .hero { padding: 6rem 0 2rem; }
-  .hero h1 { font-size: 2rem; }
-  .topic { padding: 1.25rem; }
-  pre { padding: 1rem; font-size: .75rem; }
-}
