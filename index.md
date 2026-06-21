@@ -1,7 +1,7 @@
 ---
 layout: default
-title: DSA Concepts Guide — 83 Algorithms & Data Structures
-description: Master 83 essential DSA concepts — arrays, trees, graphs, DP, and more. Pseudocode and notes for technical interview prep.
+title: DSA Concepts Guide - 83 Essential DSA Concepts
+description: Master 83 essential DSA concepts with pseudocode — arrays, trees, graphs, DP, and more for interview prep.
 image: /assets/og-image.png
 twitter:
   card: summary_large_image
