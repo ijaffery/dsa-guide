@@ -66,17 +66,23 @@
     el.appendChild(star);
   }
 
-  // Update the page title to show the bookmark
-  function updatePageTitle(anchor) {
+  // Update the header bookmark icon
+  function updateHeaderIcon(anchor) {
+    var icon = document.getElementById('bookmark-header-icon');
+    if (!icon) return;
+
+    var heading = document.getElementById(anchor);
+    var title = heading ? heading.textContent.trim() : anchor;
+
     if (anchor) {
-      var heading = document.getElementById(anchor);
-      var match = heading ? heading.textContent.match(/^\d+/) : null;
-      var num = match ? match[0] : '?';
-      document.title = '\u2b50 ' + num;
+      icon.style.display = 'inline';
+      icon.title = 'Click to go to: ' + title;
+      icon.textContent = '\ud83d\udcd6';
+      icon.style.opacity = '1';
     } else {
-      // Restore original title
-      var original = localStorage.getItem('dsa-guide-original-title');
-      if (original) document.title = original;
+      icon.style.display = 'none';
+      icon.title = '';
+      icon.style.opacity = '.8';
     }
   }
 
@@ -88,22 +94,18 @@
       clearBookmark();
       var marker = document.querySelector('.resume-marker');
       if (marker) marker.remove();
-      updatePageTitle(null);
+      updateHeaderIcon(null);
     } else {
       // Not bookmarked — save it
       saveBookmark(anchor);
       addStar(anchor);
       flashHeading(anchor);
-      updatePageTitle(anchor);
+      updateHeaderIcon(anchor);
     }
   }
 
   // ── Init ──
   document.addEventListener('DOMContentLoaded', function () {
-    // Save original page title
-    if (!localStorage.getItem('dsa-guide-original-title')) {
-      localStorage.setItem('dsa-guide-original-title', document.title);
-    }
     // 1. If URL has a hash (user bookmarked/shared a URL), scroll to it
     const hash = location.hash.slice(1);
     if (hash && document.getElementById(hash)) {
@@ -115,15 +117,13 @@
     if (lastBookmark) {
       // Add star marker so user can see where they left off
       addStar(lastBookmark);
-      // Update page title
-      updatePageTitle(lastBookmark);
+      // Show header icon
+      updateHeaderIcon(lastBookmark);
 
-      // Clickable title to scroll to bookmark
-      var titleEl = document.querySelector('.site-title');
-      if (titleEl) {
-        titleEl.title = 'Click to go to: ' + lastBookmark;
-        titleEl.style.cursor = 'pointer';
-        titleEl.addEventListener('click', function (e) {
+      // Header icon click → scroll to bookmark
+      var icon = document.getElementById('bookmark-header-icon');
+      if (icon) {
+        icon.addEventListener('click', function (e) {
           e.preventDefault();
           scrollTo(lastBookmark);
         });
