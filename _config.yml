@@ -1,7 +1,10 @@
 # ─── GitHub Pages / Jekyll Configuration ───
 
-title: DSA Concepts Guide
-description: Master Data Structures & Algorithms with 83 concepts — arrays, trees, graphs, DP, and more. Pseudocode and notes for C++ and Python interview prep.
+title: DSA Concepts Guide — 83 Algorithms & Data Structures
+og_image: /dsa-guide/assets/og-image.png
+twitter:
+  card: summary_large_image
+description: Master 83 essential DSA concepts — arrays, trees, graphs, DP, and more. Pseudocode and notes for technical interview prep.
 baseurl: "/dsa-guide"
 url: ""
 
