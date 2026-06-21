@@ -119,15 +119,16 @@
       addStar(lastBookmark);
       // Show header icon
       updateHeaderIcon(lastBookmark);
+    }
 
-      // Header icon click → scroll to bookmark
-      var icon = document.getElementById('bookmark-header-icon');
-      if (icon) {
-        icon.addEventListener('click', function (e) {
-          e.preventDefault();
-          scrollTo(lastBookmark);
-        });
-      }
+    // Header icon click → scroll to CURRENT bookmark (reads from storage each time)
+    var headerIcon = document.getElementById('bookmark-header-icon');
+    if (headerIcon) {
+      headerIcon.addEventListener('click', function (e) {
+        e.preventDefault();
+        var currentBookmark = loadBookmark();
+        if (currentBookmark) scrollTo(currentBookmark);
+      });
     }
 
     // 3. On every nav link click, toggle the bookmark

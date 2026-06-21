@@ -110,15 +110,18 @@ main {
 
 /* ─── Header bookmark icon ─── */
 .bookmark-icon {
-  font-size: 1rem;
-  color: var(--accent);
+  font-size: 1.2rem;
   text-decoration: none;
-  margin-right: .5rem;
-  opacity: .8;
-  transition: opacity .2s;
+  margin-left: .5rem;
   cursor: pointer;
   flex-shrink: 0;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+  opacity: .8;
+  transition: opacity .2s;
 }
+.bookmark-icon:hover { opacity: 1; }
 .bookmark-icon:hover { opacity: 1; }
 
 d05|
