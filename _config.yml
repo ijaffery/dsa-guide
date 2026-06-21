@@ -19,15 +19,11 @@ plugins:
   - jekyll-feed
   - jekyll-seo-tag
   - jekyll-sitemap
-  - jekyll-compress-html
+  - jekyll-minify-html
 
-# ─── HTML Compression ───
-compress_html:
-  clippings: all
-  comments: ["<!--", "-->"]
-  endings: ["html", "head", "body", "li", "dt", "dd", "p", "thead", "tr", "td", "th", "script", "style"]
-  blanklines: false
-  profile: false
+minify_html: true
+
+
 
 # ─── Markdown ───
 markdown: kramdown
@@ -45,4 +41,4 @@ defaults:
       path: ""
       type: "pages"
     values:
-      layout: "default"
+      layout: "compress"
