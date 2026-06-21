@@ -68,13 +68,15 @@
 
   // Update the page title to show the bookmark
   function updatePageTitle(anchor) {
-    var baseTitle = document.title.replace(/\s*—\s*Bookmarked:.*$/, '');
     if (anchor) {
       var heading = document.getElementById(anchor);
-      var title = heading ? heading.textContent.trim().replace(/\d+\.\s*/, '') : anchor;
-      document.title = baseTitle + ' — Bookmarked: ' + title;
+      var match = heading ? heading.textContent.match(/^\d+/) : null;
+      var num = match ? match[0] : '?';
+      document.title = '\u2b50 ' + num;
     } else {
-      document.title = baseTitle;
+      // Restore original title
+      var original = localStorage.getItem('dsa-guide-original-title');
+      if (original) document.title = original;
     }
   }
 
@@ -98,6 +100,10 @@
 
   // ── Init ──
   document.addEventListener('DOMContentLoaded', function () {
+    // Save original page title
+    if (!localStorage.getItem('dsa-guide-original-title')) {
+      localStorage.setItem('dsa-guide-original-title', document.title);
+    }
     // 1. If URL has a hash (user bookmarked/shared a URL), scroll to it
     const hash = location.hash.slice(1);
     if (hash && document.getElementById(hash)) {
