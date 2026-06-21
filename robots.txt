@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: /dsa-guide/sitemap.xml

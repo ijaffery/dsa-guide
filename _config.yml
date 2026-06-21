@@ -1,7 +1,7 @@
 # ─── GitHub Pages / Jekyll Configuration ───
 
 title: DSA Concepts Guide
-description: Pseudocode & Notes — 83 concepts across 11 categories
+description: Master Data Structures & Algorithms with 83 concepts — arrays, trees, graphs, DP, and more. Pseudocode and notes for C++ and Python interview prep.
 baseurl: "/dsa-guide"
 url: ""
 

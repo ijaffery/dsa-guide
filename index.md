@@ -1,6 +1,7 @@
 ---
 layout: default
-title: DSA Concepts Guide
+title: DSA Concepts Guide — 83 Algorithms & Data Structures
+description: Complete guide to 83 essential DSA concepts with pseudocode and notes. Covers arrays, hash maps, trees, graphs, dynamic programming, and more for technical interview prep.
 ---
 
 # DSA Concepts Guide
