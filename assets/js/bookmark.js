@@ -66,38 +66,22 @@
     el.appendChild(star);
   }
 
-  // Check if a heading already has the star marker
-  function hasStar(anchor) {
-    var el = document.getElementById(anchor);
-    if (!el) return false;
-    return el.querySelector('.resume-marker') !== null;
-  }
+  // Update the header bookmark icon
+  function updateHeaderIcon(anchor) {
+    var icon = document.getElementById('bookmark-header-icon');
+    if (!icon) return;
 
-  // Create a floating "Resume" button
-  function createResumeBtn(anchor) {
-    const heading = document.getElementById(anchor);
-    const title = heading ? heading.textContent.trim() : anchor;
+    var heading = document.getElementById(anchor);
+    var title = heading ? heading.textContent.trim().replace(/\d+\.\s*/, '') : anchor;
 
-    const btn = document.createElement('button');
-    btn.className = 'resume-btn';
-    btn.innerHTML = '&#x1f4d6; Continue reading: ' + title;
-    btn.addEventListener('click', function () {
-      scrollTo(anchor);
-    });
-
-    const close = document.createElement('span');
-    close.className = 'resume-close';
-    close.innerHTML = '&times;';
-    close.addEventListener('click', function () {
-      btn.style.display = 'none';
-      clearBookmark();
-      // Also remove the star from the page
-      var marker = document.querySelector('.resume-marker');
-      if (marker) marker.remove();
-    });
-
-    btn.appendChild(close);
-    return btn;
+    if (anchor) {
+      icon.style.display = 'inline';
+      icon.title = 'Go to: ' + title;
+      icon.textContent = '\u2605'; // filled star
+    } else {
+      icon.style.display = 'none';
+      icon.title = '';
+    }
   }
 
   // Toggle bookmark on a topic
@@ -108,11 +92,13 @@
       clearBookmark();
       var marker = document.querySelector('.resume-marker');
       if (marker) marker.remove();
+      updateHeaderIcon(null);
     } else {
       // Not bookmarked — save it
       saveBookmark(anchor);
       addStar(anchor);
       flashHeading(anchor);
+      updateHeaderIcon(anchor);
     }
   }
 
@@ -124,14 +110,22 @@
       setTimeout(function () { scrollTo(hash); }, 100);
     }
 
-    // 2. If there's a saved bookmark from a previous session, show resume button
+    // 2. If there's a saved bookmark from a previous session
     const lastBookmark = loadBookmark();
-    if (lastBookmark && lastBookmark !== hash) {
+    if (lastBookmark) {
       // Add star marker so user can see where they left off
       addStar(lastBookmark);
+      // Show header icon
+      updateHeaderIcon(lastBookmark);
 
-      var btn = createResumeBtn(lastBookmark);
-      document.body.appendChild(btn);
+      // Header icon click → scroll to bookmark
+      var icon = document.getElementById('bookmark-header-icon');
+      if (icon) {
+        icon.addEventListener('click', function (e) {
+          e.preventDefault();
+          scrollTo(lastBookmark);
+        });
+      }
     }
 
     // 3. On every nav link click, toggle the bookmark

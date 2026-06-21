@@ -104,6 +104,21 @@ main {
   letter-spacing: -.02em;
 }
 
+/* ─── Header bookmark icon ─── */
+.bookmark-icon {
+  font-size: 1rem;
+  color: var(--accent);
+  text-decoration: none;
+  margin-left: .75rem;
+  opacity: .8;
+  transition: opacity .2s;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.bookmark-icon:hover { opacity: 1; }
+
+d05|
+
 .site-nav { display: none; gap: .25rem; }
 @media (min-width: 900px) {
   .site-nav { display: flex; }
