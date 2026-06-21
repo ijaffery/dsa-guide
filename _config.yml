@@ -19,14 +19,15 @@ plugins:
   - jekyll-feed
   - jekyll-seo-tag
   - jekyll-sitemap
-  # - jekyll-compress-html  # not installed locally; available on GitHub Pages
-# ─── HTML Compression (when plugin available) ───
-# compress_html:
-#   clippings: all
-#   comments: ["<!--", "-->"]
-#   endings: ["html", "head", "body", "li", "dt", "dd", "p", "thead", "tr", "td", "th", "script", "style"]
-#   blanklines: false
-#   profile: false
+  - jekyll-compress-html
+
+# ─── HTML Compression ───
+compress_html:
+  clippings: all
+  comments: ["<!--", "-->"]
+  endings: ["html", "head", "body", "li", "dt", "dd", "p", "thead", "tr", "td", "th", "script", "style"]
+  blanklines: false
+  profile: false
 
 # ─── Markdown ───
 markdown: kramdown
