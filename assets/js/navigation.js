@@ -40,7 +40,12 @@ if (headings.length && navLinks.length) {
   headings.forEach(h => observer.observe(h));
 }
 
-// ─── Add data-num badges to h3 topic headers ───
+// ─── Restore h3 numbering (keeps numbers in heading text) ──
+document.querySelectorAll('h3[data-num]').forEach(h3 => {
+  const n = h3.getAttribute('data-num');
+  const title = h3.textContent.trim();
+  h3.textContent = n + '. ' + title;
+});
 document.querySelectorAll('h3').forEach(h3 => {
   const text = h3.textContent.trim();
   const match = text.match(/^(\d+)\./);

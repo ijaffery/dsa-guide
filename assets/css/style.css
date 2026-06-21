@@ -197,6 +197,20 @@ h3 {
   color: var(--fg);
 }
 
+/* Restore numbered badges stripped by navigation.js */
+h3[data-num]::before {
+  content: "#" attr(data-num);
+  font-size: .85rem;
+  font-weight: 700;
+  color: var(--accent);
+  background: rgba(137,180,250,.1);
+  border: 1px solid rgba(137,180,250,.2);
+  padding: .15em .55em;
+  border-radius: 6px;
+  flex-shrink: 0;
+  line-height: 1;
+}
+
 /* ─── Code Blocks ─── */
 code {
   font-family: var(--font-mono);
