@@ -386,3 +386,32 @@ body {
 @media (min-width: 1200px) {
   .container { padding: 0 3rem; }
 }
+
+/* ─── Resume Bookmark Button ─── */
+.resume-btn {
+  position: fixed; bottom: 2rem; right: 2rem; z-index: 1000;
+  background: var(--bg-elevated); color: var(--fg);
+  border: 1px solid var(--accent); border-radius: var(--radius);
+  padding: .75rem 1.25rem; font-family: var(--font-sans);
+  font-size: .9rem; font-weight: 500; cursor: pointer;
+  box-shadow: 0 4px 24px rgba(137,180,250,.2);
+  transition: all .2s;
+  display: flex; align-items: center; gap: .5rem;
+  animation: resumeSlideIn .3s ease-out;
+}
+.resume-btn:hover {
+  background: rgba(137,180,250,.12);
+  box-shadow: 0 4px 32px rgba(137,180,250,.35);
+}
+.resume-close {
+  margin-left: .5rem; opacity: .5;
+  font-size: 1.1rem; line-height: 1;
+}
+.resume-close:hover { opacity: 1; }
+@keyframes resumeSlideIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@media (max-width: 768px) {
+  .resume-btn { bottom: 1rem; right: 1rem; left: 1rem; justify-content: center; }
+}

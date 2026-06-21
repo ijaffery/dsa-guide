@@ -47,6 +47,10 @@ if (headings.length && navLinks.length) {
               ? 'var(--accent)'
               : '';
           });
+          // Update URL hash so it stays in sync with scroll position
+          if (history.replaceState) {
+            history.replaceState(null, '', '#' + id);
+          }
         }
       }
     });
