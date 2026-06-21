@@ -96,6 +96,10 @@ main {
   display: flex; align-items: center; justify-content: space-between;
   padding: .75rem 2rem;
 }
+
+.header-left {
+  display: flex; align-items: center;
+}
 .site-title {
   font-size: 1.1rem; font-weight: 700;
   background: linear-gradient(135deg, var(--accent), var(--accent2));

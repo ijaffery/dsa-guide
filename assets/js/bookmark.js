@@ -77,7 +77,7 @@
     if (anchor) {
       icon.style.display = 'inline';
       icon.title = 'Click to go to: ' + title;
-      icon.textContent = '\ud83d\udcd6';
+      icon.textContent = '\ud83d\udd16';
       icon.style.opacity = '1';
     } else {
       icon.style.display = 'none';
@@ -90,13 +90,13 @@
   function toggleBookmark(anchor) {
     var current = loadBookmark();
     if (current === anchor) {
-      // Already bookmarked — remove it
+      // Same topic clicked again — remove it
       clearBookmark();
       var marker = document.querySelector('.resume-marker');
       if (marker) marker.remove();
       updateHeaderIcon(null);
     } else {
-      // Not bookmarked — save it
+      // Different topic — move bookmark
       saveBookmark(anchor);
       addStar(anchor);
       flashHeading(anchor);
