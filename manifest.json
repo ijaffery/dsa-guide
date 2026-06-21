@@ -1,0 +1,21 @@
+{
+  "name": "DSA Concepts Guide",
+  "short_name": "DSA Guide",
+  "start_url": "/dsa-guide/",
+  "display": "standalone",
+  "background_color": "#0a0a0f",
+  "theme_color": "#0a0a0f",
+  "description": "83 Essential DSA Concepts with pseudocode — arrays, trees, graphs, DP, and more for interview prep.",
+  "icons": [
+    {
+      "src": "/dsa-guide/assets/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/dsa-guide/assets/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

@@ -47,6 +47,7 @@ html {
   scrollbar-width: thin;
   scrollbar-color: var(--border) transparent;
 }
+
 /* Header height = .75rem padding top + content (~32px) + .75rem padding bottom ≈ 56px */
 body {
   padding-top: 56px; /* push content below fixed header */
@@ -75,6 +76,12 @@ a:hover { color: var(--accent2); text-decoration: underline; }
 
 /* ─── Container ─── */
 .container { max-width: var(--max-width); margin: 0 auto; padding: 0 2rem; }
+
+/* ─── Content Visibility: skip rendering off-screen content ─── */
+main {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 8000px;
+}
 
 /* ─── Header ─── */
 .site-header {
@@ -379,4 +386,3 @@ body {
 @media (min-width: 1200px) {
   .container { padding: 0 3rem; }
 }
-

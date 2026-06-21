@@ -1,7 +1,7 @@
 # ─── GitHub Pages / Jekyll Configuration ───
 
 title: DSA Guide
-og_image: /dsa-guide/assets/og-image.png
+og_image: /dsa-guide/assets/og-image.webp
 twitter:
   card: summary_large_image
 description: Master 83 essential DSA concepts with pseudocode — arrays, trees, graphs, DP, and more for technical interview prep.
@@ -19,6 +19,14 @@ plugins:
   - jekyll-feed
   - jekyll-seo-tag
   - jekyll-sitemap
+  # - jekyll-compress-html  # not installed locally; available on GitHub Pages
+# ─── HTML Compression (when plugin available) ───
+# compress_html:
+#   clippings: all
+#   comments: ["<!--", "-->"]
+#   endings: ["html", "head", "body", "li", "dt", "dd", "p", "thead", "tr", "td", "th", "script", "style"]
+#   blanklines: false
+#   profile: false
 
 # ─── Markdown ───
 markdown: kramdown

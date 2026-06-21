@@ -10,12 +10,21 @@ document.querySelectorAll('.site-nav a').forEach(link => {
 
 // ─── Scroll progress bar ───
 const progressBar = document.getElementById('progress');
+let ticking = false;
+
 function updateProgress() {
-  const scrollTop = window.scrollY;
-  const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-  const pct = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
-  progressBar.style.width = pct + '%';
+  if (!ticking) {
+    requestAnimationFrame(() => {
+      const scrollTop = window.scrollY;
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const pct = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+      progressBar.style.width = pct + '%';
+      ticking = false;
+    });
+    ticking = true;
+  }
 }
+
 window.addEventListener('scroll', updateProgress, { passive: true });
 updateProgress();
 
@@ -24,15 +33,21 @@ const headings = document.querySelectorAll('h2[id]');
 const navLinks = document.querySelectorAll('.nav-link');
 
 if (headings.length && navLinks.length) {
+  // Use activeSection to avoid unnecessary DOM writes
+  let activeSection = '';
+
   const observer = new IntersectionObserver(entries => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
         const id = entry.target.id;
-        navLinks.forEach(link => {
-          link.style.color = link.getAttribute('href') === '#' + id
-            ? 'var(--accent)'
-            : '';
-        });
+        if (activeSection !== id) {
+          activeSection = id;
+          navLinks.forEach(link => {
+            link.style.color = link.getAttribute('href') === '#' + id
+              ? 'var(--accent)'
+              : '';
+          });
+        }
       }
     });
   }, { rootMargin: '-20% 0px -70% 0px' });
@@ -41,32 +56,29 @@ if (headings.length && navLinks.length) {
 }
 
 // ─── Restore h3 numbering (keeps numbers in heading text) ──
-document.querySelectorAll('h3[data-num]').forEach(h3 => {
-  const n = h3.getAttribute('data-num');
-  const title = h3.textContent.trim();
-  h3.textContent = n + '. ' + title;
-});
+// Single-pass: strip leading numbers and set data-num simultaneously
 document.querySelectorAll('h3').forEach(h3 => {
   const text = h3.textContent.trim();
   const match = text.match(/^(\d+)\./);
   if (match) {
     h3.setAttribute('data-num', match[1]);
-    h3.textContent = text.replace(/^(\d+)\./, '');
+    h3.textContent = text.replace(/^(\d+)\./, '').trim();
   }
 });
 
-// ─── Smooth scroll for anchor links ───
+// ─── Smooth scroll for anchor links (delegated) ───
 const HEADER_OFFSET = 60; // match site-header height + buffer
 
-document.querySelectorAll('a[href^="#"]').forEach(link => {
-  link.addEventListener('click', (e) => {
-    const id = link.getAttribute('href').slice(1);
-    const target = document.getElementById(id);
-    if (target) {
-      e.preventDefault();
-      const top = target.getBoundingClientRect().top + window.scrollY - HEADER_OFFSET;
-      window.scrollTo({ top, behavior: 'smooth' });
-      history.pushState(null, '', link.getAttribute('href'));
-    }
-  });
+document.addEventListener('click', (e) => {
+  const link = e.target.closest('a[href^="#"]');
+  if (!link) return;
+
+  const id = link.getAttribute('href').slice(1);
+  const target = document.getElementById(id);
+  if (!target) return;
+
+  e.preventDefault();
+  const top = target.getBoundingClientRect().top + window.scrollY - HEADER_OFFSET;
+  window.scrollTo({ top, behavior: 'smooth' });
+  history.pushState(null, '', link.getAttribute('href'));
 });

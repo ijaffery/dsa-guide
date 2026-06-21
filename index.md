@@ -2,7 +2,7 @@
 layout: default
 title: DSA Concepts Guide - 83 Essential DSA Concepts
 description: Master 83 essential DSA concepts with pseudocode — arrays, trees, graphs, DP, and more for interview prep.
-image: /assets/og-image.png
+image: /assets/og-image.webp
 twitter:
   card: summary_large_image
 ---
