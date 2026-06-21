@@ -109,7 +109,7 @@ main {
   font-size: 1rem;
   color: var(--accent);
   text-decoration: none;
-  margin-left: .75rem;
+  margin-right: .5rem;
   opacity: .8;
   transition: opacity .2s;
   cursor: pointer;
