@@ -66,21 +66,15 @@
     el.appendChild(star);
   }
 
-  // Update the header bookmark icon
-  function updateHeaderIcon(anchor) {
-    var icon = document.getElementById('bookmark-header-icon');
-    if (!icon) return;
-
-    var heading = document.getElementById(anchor);
-    var title = heading ? heading.textContent.trim().replace(/\d+\.\s*/, '') : anchor;
-
+  // Update the page title to show the bookmark
+  function updatePageTitle(anchor) {
+    var baseTitle = document.title.replace(/\s*—\s*Bookmarked:.*$/, '');
     if (anchor) {
-      icon.style.display = 'inline';
-      icon.title = 'Go to: ' + title;
-      icon.textContent = '\u2605'; // filled star
+      var heading = document.getElementById(anchor);
+      var title = heading ? heading.textContent.trim().replace(/\d+\.\s*/, '') : anchor;
+      document.title = baseTitle + ' — Bookmarked: ' + title;
     } else {
-      icon.style.display = 'none';
-      icon.title = '';
+      document.title = baseTitle;
     }
   }
 
@@ -92,13 +86,13 @@
       clearBookmark();
       var marker = document.querySelector('.resume-marker');
       if (marker) marker.remove();
-      updateHeaderIcon(null);
+      updatePageTitle(null);
     } else {
       // Not bookmarked — save it
       saveBookmark(anchor);
       addStar(anchor);
       flashHeading(anchor);
-      updateHeaderIcon(anchor);
+      updatePageTitle(anchor);
     }
   }
 
@@ -115,13 +109,15 @@
     if (lastBookmark) {
       // Add star marker so user can see where they left off
       addStar(lastBookmark);
-      // Show header icon
-      updateHeaderIcon(lastBookmark);
+      // Update page title
+      updatePageTitle(lastBookmark);
 
-      // Header icon click → scroll to bookmark
-      var icon = document.getElementById('bookmark-header-icon');
-      if (icon) {
-        icon.addEventListener('click', function (e) {
+      // Clickable title to scroll to bookmark
+      var titleEl = document.querySelector('.site-title');
+      if (titleEl) {
+        titleEl.title = 'Click to go to: ' + lastBookmark;
+        titleEl.style.cursor = 'pointer';
+        titleEl.addEventListener('click', function (e) {
           e.preventDefault();
           scrollTo(lastBookmark);
         });
