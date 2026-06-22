@@ -402,6 +402,14 @@ body {
     grid-template-columns: 1fr;
     padding-left: 1.25rem;
   }
+  /* shrink inline math to fit on narrow screens */
+  .MJX-TEX,
+  .highlighter-rouge {
+    display: inline !important;
+    white-space: normal !important;
+    word-break: break-all !important;
+  }
+
 }
 
 /* ─── Large screens ─── */
