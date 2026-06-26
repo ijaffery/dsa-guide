@@ -3,24 +3,17 @@
 title: DSA Guide
 og_image: /dsa-guide/assets/og-image.webp
 twitter:
+  site: "@ijaffery"
   card: summary_large_image
 description: Master 83 essential DSA concepts with pseudocode — arrays, trees, graphs, DP, and more for technical interview prep.
+url: "https://ijaffery.github.io"
 baseurl: "/dsa-guide"
-url: ""
-
-# GitHub Pages uses the `jekyll-paginate` and `minimal-light` themes
-# or the default theme.  We use the `minimal-light` look-alike via
-# the built-in `minima` theme, customised below.
-
-# theme: minima  -- we serve assets/css/style.css directly; no SCSS pipeline needed
 
 # ─── Plugins ───
 plugins:
   - jekyll-feed
   - jekyll-seo-tag
   - jekyll-sitemap
-
-
 
 # ─── Markdown ───
 markdown: kramdown
