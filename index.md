@@ -311,19 +311,29 @@ string encode(vector<string>& strs) {
     return res;
 }
 // Decode: parse length, skip '#', read that many chars
+vector<string> decode(string& s) {
+    vector<string> res;
+    int i = 0;
+    while (i < (int)s.size()) {
+        int j = s.find('#', i);
+        int len = stoi(s.substr(i, j - i));
+        res.push_back(s.substr(j + 1, len));
+        i = j + 1 + len;
+    }
+    return res;
+}
 ```
 ```python
 def encode(strs):
     return ''.join(str(len(s)) + '#' + s for s in strs)
 
 def decode(s):
-    res, i = [], 0
-    while i < len(s):
-        j = s.find('#', i)
-        length = int(s[i:j])
-        i = j + 1 + length
-        res.append(s[j + 1:i])
-        i = i
+    res, pos = [], 0
+    while pos < len(s):
+        hash_idx = s.find('#', pos)
+        length = int(s[pos:hash_idx])
+        pos = hash_idx + 1 + length
+        res.append(s[hash_idx + 1:pos])
     return res
 ```
 
@@ -362,7 +372,7 @@ for i in range(n - 1, -1, -1):
 
 ### 13. Character Classification
 
-Determine whether a character is alphanumeric, alphabetic, a digit, etc. using `isalnum`, `isdigit`, `isalpha` in C++ or string methods `.isalnum()`, `.isdigit()`, `.isalpha()` in Python. Essential for palindrome checks and string parsing.
+Determine whether a character is alphanumeric, alphabetic, a digit, etc. using `isalnum`, `isdigit`, `isalpha` in C++ or string methods `.isalnum()`, `.isdigit()`, `.isalpha()` in Python. Essential for palindrome checks and string parsing. Case conversion with `tolower`/`toupper` (C++) or `.lower()`/`.upper()` (Python) is also commonly paired with these checks.
 
 **Problem:** *Valid Palindrome* (classification step) — skip characters that aren't letters or digits before comparing.
 
@@ -695,7 +705,7 @@ return -1
 
 ### 24. Binary Search on a Rotated Sorted Array
 
-A rotated sorted array splits into two sorted halves. Exactly one of the two halves defined by `mid` is always fully sorted — use that to determine which half the target lies in. In C++, use `unordered_map` for lookups; in Python, use `dict()` for the same. To find the minimum specifically, compare `nums[mid]` to `nums[hi]` instead.
+A rotated sorted array splits into two sorted halves. Exactly one of the two halves defined by `mid` is always fully sorted — use that to determine which half the target lies in. To find the minimum specifically, compare `nums[mid]` to `nums[hi]` instead.
 
 > **📐 Math:** Comparing $\text{nums}[mid]$ to $\text{nums}[hi]$ (not $\text{nums}[lo]$) handles duplicates and avoids edge-case ambiguity: if $\text{nums}[mid] > \text{nums}[hi]$, the minimum must lie strictly to the right of $mid$ (since a sorted run can't 'wrap' over a larger value), so $lo = mid+1$ is always safe to discard $mid$ itself.
 
@@ -837,8 +847,10 @@ Two pointers advancing at different speeds (1 vs 2 steps). In C++, use `ListNode
 ListNode *slow = head, *fast = head;
 while (fast && fast->next) {
     slow = slow->next; fast = fast->next->next;
-    if (slow == fast) break; // cycle found (or fast hit nullptr: no cycle)
+    if (slow == fast) break; // cycle found
 }
+// If no cycle was found, fast hit nullptr (slow != fast)
+if (slow != fast) return nullptr;  // no cycle
 // Phase 2: find the entry point
 slow = head;
 while (slow != fast) { slow = slow->next; fast = fast->next; }
@@ -852,7 +864,12 @@ while fast and fast.next:
     fast = fast.next.next
     if slow == fast: break
 
+# If no cycle was found (fast hit None), return None
+if slow != fast:
+    return None
+
 # Phase 2: find the entry point
+
 slow = head
 while slow != fast:
     slow = slow.next
@@ -1197,6 +1214,7 @@ bool isBalanced(TreeNode* n) {
 }
 ```
 
+**Problem:** *Balanced Binary Tree*.
 ```python
 # Balanced check with a height helper that returns [is_balanced, height]
 class Solution:
@@ -1210,7 +1228,6 @@ class Solution:
         return check(root)[0]
 ```
 
-**Problem:** *Balanced Binary Tree*.
 
 ---
 
@@ -1343,6 +1360,8 @@ int gain(TreeNode* n) {
     maxPath = max(maxPath, l + n->val + r); // global: both branches
     return n->val + max(l, r);              // local: one branch up
 }
+
+> **Note:** `gain()` returns `n->val + max(l, r)` which can be negative for leaf nodes with negative values. For the standard LeetCode Maximum Path Sum problem this is correct — the global update clamps negative branches to 0, but the return value lets the parent decide whether to extend this branch. If a variant requires clamping the return value too, use `max(0, n->val + max(l, r))`.
 ```
 
 ```python
@@ -1351,24 +1370,27 @@ class TreeNode:
         self.val = x
         self.left = self.right = None
 
-# Diameter
-diam = 0
-def depth(n):
-    global diam
-    if not n: return 0
-    l, r = depth(n.left), depth(n.right)
-    diam = max(diam, l + r)
-    return 1 + max(l, r)
+class Solution:
+    def diameterOfBinaryTree(self, root):
+        self.diam = 0
+        def depth(n):
+            if not n: return 0
+            l, r = depth(n.left), depth(n.right)
+            self.diam = max(self.diam, l + r)
+            return 1 + max(l, r)
+        depth(root)
+        return self.diam
 
-# Max path sum
-max_path = float('-inf')
-def gain(n):
-    global max_path
-    if not n: return 0
-    l = max(0, gain(n.left))
-    r = max(0, gain(n.right))
-    max_path = max(max_path, l + n.val + r)
-    return n.val + max(l, r)
+    def maxPathSum(self, root):
+        self.max_path = float('-inf')
+        def gain(n):
+            if not n: return 0
+            l = max(0, gain(n.left))
+            r = max(0, gain(n.right))
+            self.max_path = max(self.max_path, l + n.val + r)
+            return n.val + max(l, r)
+        gain(root)
+        return self.max_path
 ```
 
 
@@ -1532,8 +1554,13 @@ public:
         }
         cur->end = true;
     }
-    // search(w): same walk, return cur && cur->end
-    // wildcard search ('.'): DFS, trying all 26 children at that position
+    // destructor: free all nodes recursively
+    ~Trie() { destroy(root); }
+    void destroy(TrieNode* n) {
+        if (!n) return;
+        for (auto c : n->ch) destroy(c);
+        delete n;
+    }
 };
 ```
 
@@ -1562,7 +1589,16 @@ class Trie:
             cur = cur.children[c]
         return cur.end
 
-    # wildcard search ('.'): DFS, trying all children at that position
+    def searchWord(self, word):  # wildcard '.' matches any character
+        def dfs(node, i):
+            if i == len(word): return node.end
+            c = word[i]
+            if c == '.':
+                return any(dfs(child, i + 1) for child in node.children.values())
+            if c in node.children:
+                return dfs(node.children[c], i + 1)
+            return False
+        return dfs(self.root, 0)
 ```
 
 
@@ -1570,7 +1606,7 @@ class Trie:
 
 ### 45. Character & String Utilities for Tree/Trie Problems
 
-ASCII arithmetic used throughout trie and string-tree problems: `c - 'a'` maps a lowercase letter to an index 0–25, `toupper`/`tolower` convert case, and `isalpha`/`isdigit` test character type.
+ASCII arithmetic used throughout trie and string-tree problems: `c - 'a'` maps a lowercase letter to an index 0–25, `toupper`/`tolower` convert case, and `isalpha`/`isdigit` test character type. (See also #8 String Manipulation and #13 Character Classification for broader coverage.)
 
 **Pattern:** general-purpose utility, not tied to one problem — used as a building block inside *Implement Trie* and similar string/trie problems.
 
@@ -1642,6 +1678,13 @@ function<void(int)> dfs = [&](int u) {
     for (int v : adj[u]) if (!vis[v]) dfs(v);
 };
 
+// Plain function version (no std::function overhead):
+void dfs(int u) {
+    vis[u] = true;
+    for (int v : adj[u]) if (!vis[v]) dfs(v);
+}
+// Call: dfs(src);
+
 // Graph BFS
 queue<int> q; vis[src] = true; q.push(src);
 while (!q.empty()) {
@@ -1661,6 +1704,21 @@ def dfs(u):
     for v in adj[u]:
         if not vis[v]:
             dfs(v)
+
+# Iterative DFS (avoids recursion limit for large graphs)
+# Stack stores (node, iterator_over_neighbors) to resume after returning
+vis = [False] * n
+stk = [(src, iter(adj[src]))]
+vis[src] = True
+while stk:
+    u, it = stk[-1]
+    try:
+        v = next(it)
+        if not vis[v]:
+            vis[v] = True
+            stk.append((v, iter(adj[v])))
+    except StopIteration:
+        stk.pop()
 
 # Graph BFS
 q = deque([src])
@@ -1776,6 +1834,7 @@ A linear ordering of a DAG's nodes such that for every edge u → v, u appears b
 ```cpp
 // Kahn's algorithm (BFS)
 vector<int> indeg(n, 0);
+// requires C++17 structured bindings
 for (auto& [u, v] : edges) indeg[v]++;
 queue<int> q;
 for (int i = 0; i < n; i++) if (!indeg[i]) q.push(i);
@@ -1863,6 +1922,32 @@ def has_cycle(u):
         if st[v] == 1: return True
         if st[v] == 0 and has_cycle(v): return True
     st[u] = 2
+    return False
+
+# Iterative version (avoids recursion limit for large graphs)
+# Uses explicit stack with state tracking (entering vs exiting nodes)
+def has_cycle_iterative():
+    color = [0] * n  # 0=unvisited, 1=in-stack, 2=done
+    stk = []
+    for start in range(n):
+        if color[start] != 0: continue
+        stk.append((start, iter(adj[start]), False))  # (node, neighbors_iter, returning)
+        color[start] = 1
+        while stk:
+            u, it, returning = stk[-1]
+            if returning:
+                stk.pop()
+                if stk: color[stk[-1][0]] = 2  # mark parent done when popping
+                continue
+            try:
+                v = next(it)
+                if color[v] == 1: return True   # back edge → cycle
+                if color[v] == 0:
+                    color[v] = 1
+                    stk.append((v, iter(adj[v]), False))
+            except StopIteration:
+                color[u] = 2
+                stk.pop()
     return False
 ```
 
@@ -2157,6 +2242,8 @@ Counting monotone paths (only right or down moves) in an m×n grid equals the bi
 
 **Problem:** *Unique Paths*.
 
+> **⚠️ Note:** Values grow as binomial coefficients — `int` overflows for $m+n$ roughly > 30. Use `long long` or modular arithmetic for large grids.
+
 ```cpp
 vector<vector<int>> dp(m, vector<int>(n, 1));
 for (int i = 1; i < m; i++)
@@ -2211,6 +2298,7 @@ A 2-D table `dp[i][j]` parameterized by two indices — here, the start and end 
 
 ```cpp
 int n = s.size();
+
 vector<vector<bool>> dp(n, vector<bool>(n, false));
 for (int i = 0; i < n; i++) dp[i][i] = true;
 for (int i = n - 2; i >= 0; i--)
@@ -2300,13 +2388,13 @@ for (auto& cur : v) {
 def merge(intervals):
     if not intervals: return []
     intervals.sort()
-    res = [intervals[0][:]]
+    res = [intervals[0][:]]   # copy to avoid mutating input
     for cur in intervals[1:]:
         last = res[-1]
         if cur[0] <= last[1]:
             last[1] = max(last[1], cur[1])
         else:
-            res.append(cur[:])
+            res.append(cur)   # reference ok — cur won't be modified
     return res
 ```
 
@@ -2360,6 +2448,8 @@ def min_meeting_rooms(intervals):
     for s, e in intervals:
         events.append((s, 1))
         events.append((e, -1))
+    # Sort: at same timestamp, end (-1) before start (1),
+    # so a room freed at time T can be reused by a meeting starting at T
     events.sort()
     cur = peak = 0
     for t, d in events:
@@ -2578,6 +2668,19 @@ for (int r = 0; r < R; r++)
         if (m[r][c] == 0) { rowSet.insert(r); colSet.insert(c); }
 for (int r : rowSet) fill(m[r].begin(), m[r].end(), 0);
 for (int c : colSet) for (int r = 0; r < R; r++) m[r][c] = 0;
+
+// --- O(1) space: use first row and first column as markers ---
+bool firstRowZero = false, firstColZero = false;
+for (int c = 0; c < C; c++) if (m[0][c] == 0) firstRowZero = true;
+for (int r = 0; r < R; r++) if (m[r][0] == 0) firstColZero = true;
+for (int r = 1; r < R; r++)
+    for (int c = 1; c < C; c++)
+        if (m[r][c] == 0) { m[r][0] = 0; m[0][c] = 0; }
+for (int r = 1; r < R; r++)
+    for (int c = 1; c < C; c++)
+        if (m[r][0] == 0 || m[0][c] == 0) m[r][c] = 0;
+if (firstRowZero) for (int c = 0; c < C; c++) m[0][c] = 0;
+if (firstColZero) for (int r = 0; r < R; r++) m[r][0] = 0;
 ```
 
 ```python
@@ -2596,19 +2699,21 @@ def set_zeroes(matrix):
         for r in range(R): matrix[r][c] = 0
 ```
 
-
 ---
-
 ### 74. Sign-as-Flag Marking (O(1) Space Membership)
 
 When values are bounded to a known range (e.g. `[1, n]`), use the *sign* of existing array entries as a membership flag instead of a separate hash set. Negate `nums[|x|-1]` to record that value `|x|` has been seen; a second pass finds the first still-positive index, whose value+1 was never present.
 
-> **📐 Math:** Marking $\text{nums}[|x|-1]$ negative is a clever $O(1)$-space membership trick: since values are bounded to $[1, n]$, each value maps to a unique valid index, so 'is value $v$ present' becomes 'is index $v-1$ negative' — turning a presence query into an $O(1)$ sign check instead of a hash set lookup.
+> **📐 Math:** Marking `nums[|x|-1]` negative is a clever $O(1)$-space membership trick: since values are bounded to $[1, n]$, each value maps to a unique valid index, so 'is value $v$ present' becomes 'is index $v-1$ negative' — turning a presence query into an $O(1)$ sign check instead of a hash set lookup.
 
 **Problem:** *First Missing Positive*.
 
 ```cpp
-for (int x : nums) { int i = abs(x) - 1; if (i >= 0 && i < n) nums[i] = -abs(nums[i]); }
+for (int x : nums) {
+    if (x <= 0 || x > n) continue;          // out of [1, n] range
+    int i = x - 1;                           // x > 0, so no abs() needed
+    if (i >= 0 && i < n) nums[i] = -abs(nums[i]);
+}
 for (int i = 0; i < n; i++)
     if (nums[i] > 0) return i + 1; // i+1 never appeared
 return n + 1;
@@ -2648,8 +2753,11 @@ int neg = ~x + 1;
 
 ```python
 # Print 32-bit binary
+# Note: mask with 0xFFFFFFFF for negatives to mimic 32-bit two's complement
+# (Python integers are arbitrary precision, so right-shift sign-extends)
+x32 = x & 0xFFFFFFFF
 for k in range(31, -1, -1):
-    print((x >> k) & 1, end='')
+    print((x32 >> k) & 1, end='')
 print()
 
 # Two's complement of x: ~x + 1 (in Python, use -x)
@@ -2722,6 +2830,8 @@ while t:
 is_pow2 = x > 0 and not (x & (x - 1))
 lsb = x & (-x)
 ```
+
+> **⚠️ Note:** Python integers are arbitrary precision. These bit tricks assume non-negative inputs and behave like fixed-width operations in competitive programming contexts. For negative values, mask first: `x &= 0xFFFFFFFF`.
 
 
 ---
@@ -2863,7 +2973,7 @@ bool dfs(vector<vector<char>>& board, string& word, int r, int c, int i) {
 
 ```python
 def word_search(board, word):
-    R, C = len(board), len(board[0])
+    R, C = len(board), len(board[0])  # captured by closure in dfs()
     def dfs(r, c, i):
         if i == len(word): return True
         if r < 0 or r >= R or c < 0 or c >= C or board[r][c] != word[i]:
