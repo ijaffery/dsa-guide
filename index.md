@@ -1360,8 +1360,6 @@ int gain(TreeNode* n) {
     maxPath = max(maxPath, l + n->val + r); // global: both branches
     return n->val + max(l, r);              // local: one branch up
 }
-
-> **Note:** `gain()` returns `n->val + max(l, r)` which can be negative for leaf nodes with negative values. For the standard LeetCode Maximum Path Sum problem this is correct — the global update clamps negative branches to 0, but the return value lets the parent decide whether to extend this branch. If a variant requires clamping the return value too, use `max(0, n->val + max(l, r))`.
 ```
 
 ```python
@@ -1393,6 +1391,7 @@ class Solution:
         return self.max_path
 ```
 
+> **Note:** `gain()` returns `n->val + max(l, r)` which can be negative for leaf nodes with negative values. For the standard LeetCode Maximum Path Sum problem this is correct — the global update clamps negative branches to 0, but the return value lets the parent decide whether to extend this branch. If a variant requires clamping the return value too, use `max(0, n->val + max(l, r))`.
 
 ---
 
